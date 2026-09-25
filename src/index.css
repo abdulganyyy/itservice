@@ -22,8 +22,13 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 222 47% 11%;
+    --ring: 217 100% 42%;
     --radius: 0.375rem;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
@@ -38,6 +43,20 @@
     display: flex;
     flex-direction: column;
   }
+}
+
+@layer utilities {
+  .font-display-lg { font-family: 'Inter', sans-serif; font-size: 30px; line-height: 36px; font-weight: 700; letter-spacing: -0.02em; }
+  .font-headline-lg { font-family: 'Inter', sans-serif; font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.015em; }
+  .font-headline-md { font-family: 'Inter', sans-serif; font-size: 20px; line-height: 28px; font-weight: 600; letter-spacing: -0.01em; }
+  .font-headline-sm { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 24px; font-weight: 600; letter-spacing: -0.005em; }
+  .font-title-md { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 20px; font-weight: 600; }
+  .font-body-lg { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 24px; font-weight: 400; }
+  .font-body-md { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 20px; font-weight: 400; }
+  .font-body-sm { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 16px; font-weight: 400; }
+  .font-label-md { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 16px; font-weight: 500; }
+  .font-label-sm { font-family: 'Inter', sans-serif; font-size: 11px; line-height: 14px; font-weight: 600; letter-spacing: 0.04em; }
+  .font-code-md { font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 18px; font-weight: 400; }
 }
 
 /* Material Symbols alignment helper */
