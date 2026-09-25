@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary-container": "#7c839b", "surface-container-high": "#dce9ff", "on-tertiary": "#ffffff", "primary-fixed-dim": "#bec6e0", "on-primary-fixed-variant": "#3f465c", "on-surface": "#0b1c30", "tertiary-fixed": "#d5e3fc", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-tertiary-container": "#77859a", "surface-container-lowest": "#ffffff", "surface": "#f8f9ff", "surface-variant": "#d3e4fe", "on-secondary-container": "#fefcff", "surface-container": "#e5eeff", "secondary": "#0051d5", "on-tertiary-fixed-variant": "#3a485b", "on-primary-fixed": "#131b2e", "on-tertiary-fixed": "#0d1c2e", "surface-container-highest": "#d3e4fe", "on-surface-variant": "#45464d", "tertiary-fixed-dim": "#b9c7df", "error-container": "#ffdad6", "tertiary-container": "#0d1c2e", "background": "#f8f9ff", "surface-container-low": "#eff4ff", "outline": "#76777d", "outline-variant": "#c6c6cd", "inverse-on-surface": "#eaf1ff", "tertiary": "#000000", "secondary-container": "#316bf3", "inverse-primary": "#bec6e0", "surface-tint": "#565e74", "surface-dim": "#cbdbf5", "on-background": "#0b1c30", "primary": "#000000", "secondary-fixed": "#dbe1ff", "on-primary": "#ffffff", "on-error": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "on-secondary-fixed": "#00174b", "primary-container": "#131b2e", "primary-fixed": "#dae2fd", "on-secondary-fixed-variant": "#003ea8", "surface-bright": "#f8f9ff", "on-error-container": "#93000a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-sm": "0.5rem", "space-xl": "2rem", "space-xs": "0.25rem", "margin": "1.5rem", "space-md": "0.75rem", "gutter": "1rem", "space-lg": "1.25rem" }, "fontFamily": { "title-md": [ "Inter" ], "headline-md": [ "Inter" ], "body-lg": [ "Inter" ], "display-lg": [ "Inter" ], "body-sm": [ "Inter" ], "body-md": [ "Inter" ], "headline-lg": [ "Inter" ], "code-md": [ "JetBrains Mono" ], "label-sm": [ "Inter" ], "label-md": [ "Inter" ], "headline-sm": [ "Inter" ] }, "fontSize": { "title-md": [ "14px", { "lineHeight": "20px", "fontWeight": "600" } ], "headline-md": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "fontWeight": "400" } ], "display-lg": [ "30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "body-sm": [ "12px", { "lineHeight": "16px", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "20px", "fontWeight": "400" } ], "headline-lg": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "code-md": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "label-md": [ "13px", { "lineHeight": "16px", "fontWeight": "500" } ], "headline-sm": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 h-16 bg-primary-container z-50 px-gutter flex items-center justify-between border-b border-primary-container/40"><div class="flex items-center gap-space-md"><img alt="Enterprise IT Service Console geometric shield and checkmark vector logo mark in slate blue and cobalt blue.. Brand logo. - Primary color: #0f172a - Font: inter - Mode: light - Roundness: rounded-sm" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XZO1XYcvxp2bVM-jPzJK0fcv1xz0DWcnF-RIeazYoLrUGfm76KdQMF1BBgBSOKaPFIbkXZ1XcXb-UU-iru-aWLaa8V--m8ZlAA5FMF9b_k_bB6GWklJ2yVHZ49o1bkzhYKPLMJSp5CQ3jNehMOHC4cZ10BY_JXamM2uF4mIXiAVftM6Elsdc9CQ4jV9u9XRtG01VL9o5vIhpcAbw--GZU6ulCG46biLqwrCfmzhSPJACxFMi64FlUWcIbe"/><div class="flex flex-col"><span class="font-title-md text-title-md text-inverse-on-surface tracking-tight leading-none">IT Service Console</span><span class="font-label-sm text-label-sm text-on-primary-container tracking-widest font-semibold">OPERATIONS CONSOLE</span></div><div class="h-6 w-px bg-outline/20 mx-space-xs"></div><div class="flex items-center gap-space-xs bg-tertiary-container/80 px-space-sm py-space-xs rounded border border-outline/30"><span class="material-symbols-outlined text-secondary text-[16px]">badge</span><span class="font-label-sm text-label-sm text-on-primary-fixed">Logged as: <strong class="text-inverse-on-surface font-semibold">IT Staff (Budi Santoso - IT Infrastructure)</strong></span></div></div><div class="flex items-center gap-space-md"><button class="flex items-center gap-space-xs bg-secondary-container hover:bg-secondary text-on-secondary px-space-md py-space-xs rounded font-title-md text-title-md shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">add_circle</span><span>+ Quick Ticket</span></button><div class="flex items-center gap-space-xs bg-surface-container-highest/20 px-space-sm py-space-xs rounded text-inverse-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">volume_up</span><span class="font-code-md text-code-md">Audio Alerts: Active (880Hz)</span></div><button class="relative p-space-xs text-inverse-on-surface hover:text-white rounded hover:bg-white/10 transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 bg-error text-on-error font-label-sm text-label-sm font-bold rounded-full">3</span></button><div class="h-6 w-px bg-outline/20"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right hidden sm:flex"><span class="font-title-md text-title-md text-inverse-on-surface leading-tight">Budi Santoso</span><span class="font-label-sm text-label-sm text-on-primary-container">Senior IT Systems Engineer</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-60 bg-surface-container-low border-r border-outline-variant/50 z-40 flex flex-col justify-between overflow-y-auto"><div class="p-space-sm flex flex-col gap-space-sm"><button class="w-full flex items-center justify-center gap-space-xs bg-secondary text-on-secondary py-space-xs rounded font-title-md text-title-md hover:bg-secondary-container transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">bolt</span><span>+ Quick Ticket</span></button><div class="px-space-xs pt-space-xs pb-space-xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">Queues &amp; Telemetry</span></div><nav class="flex flex-col gap-0.5" data-active-classes="bg-surface-container-high text-secondary font-title-md font-semibold border-l-2 border-secondary"><a aria-current="page" class="flex items-center justify-between px-space-sm py-space-xs rounded transition-colors bg-surface-container-high text-secondary font-title-md font-semibold border-l-2 border-secondary" data-path="operational-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">view_list</span><span class="font-label-md text-label-md">Operational Queue</span></div><span class="bg-secondary/15 text-secondary px-space-xs py-0.5 rounded font-label-sm text-label-sm font-bold">8</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="initial-assessment" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">assignment_late</span><span class="font-label-md text-label-md">Initial Assessment</span></div><span class="bg-error/10 text-error px-space-xs py-0.5 rounded font-label-sm text-label-sm font-bold">2</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="my-assigned-tickets" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">assignment_ind</span><span class="font-label-md text-label-md">My Assigned Tickets</span></div><span class="bg-surface-container-highest text-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm font-semibold">4</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="incident-archive" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">archive</span><span class="font-label-md text-label-md">Incident Archive / History</span></div></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="notification-log" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">notifications_active</span><span class="font-label-md text-label-md">Notification Log</span></div></a></nav></div><div class="p-space-sm border-t border-outline-variant/40 bg-surface-container/40 flex flex-col gap-space-xs"><div class="flex flex-col gap-0.5"><div class="flex items-center justify-between text-on-surface-variant"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider">Audio Alert Settings</span><span class="material-symbols-outlined text-[14px]">tune</span></div><div class="grid grid-cols-3 gap-1 pt-1"><div class="flex flex-col items-center justify-center p-1 bg-surface-container-lowest border border-outline-variant rounded text-center"><span class="font-label-sm text-label-sm font-semibold">Low</span><span class="font-code-md text-code-md text-[10px] text-on-surface-variant">440Hz</span></div><div class="flex flex-col items-center justify-center p-1 bg-surface-container-high border border-secondary rounded text-center"><span class="font-label-sm text-label-sm font-semibold text-secondary">Med</span><span class="font-code-md text-code-md text-[10px] text-secondary">880Hz</span></div><div class="flex flex-col items-center justify-center p-1 bg-surface-container-lowest border border-outline-variant rounded text-center"><span class="font-label-sm text-label-sm font-semibold">High</span><span class="font-code-md text-code-md text-[10px] text-on-surface-variant">1200Hz</span></div></div></div><div class="flex items-center gap-space-xs pt-space-xs"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">System Status: All Operational</span></div></div></aside><div class="pl-60"><main class="w-full min-h-screen pt-16 bg-surface"><div class="flex flex-col w-full relative">
+<!-- DIMMED BACKGROUND OPERATIONAL WORKSPACE (Underlay showing live context) -->
+<div class="w-full pointer-events-none select-none filter blur-[1.5px] opacity-40 transition-all duration-300">
+<!-- Top Telemetry & SLA Metric Strip -->
+<div class="p-gutter grid grid-cols-1 md:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block">Queue Backlog</span>
+<span class="font-display-lg text-display-lg text-on-surface">14</span>
+<span class="font-body-sm text-body-sm text-error font-medium block">2 Unassigned critical</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">inbox</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block">Mean Time to Triage</span>
+<span class="font-display-lg text-display-lg text-on-surface">4.2<span class="font-body-sm text-body-sm text-outline">m</span></span>
+<span class="font-body-sm text-body-sm text-secondary font-medium block">Target: &lt; 5.0m</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block">Active Engineers</span>
+<span class="font-display-lg text-display-lg text-on-surface">6/8</span>
+<span class="font-body-sm text-body-sm text-outline block">Budi S. available</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">engineering</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block">System Gateway</span>
+<span class="font-display-lg text-display-lg text-secondary">99.98%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Radius-02 degraded</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">dns</span>
+</div>
+</div>
+</div>
+<!-- Background Operational Table -->
+<div class="mx-gutter mb-gutter bg-surface-container-lowest rounded-lg shadow-sm overflow-hidden">
+<div class="bg-surface-container-low px-space-md py-space-sm flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Active Incident Telemetry Queue</span>
+<span class="font-code-md text-code-md text-outline">Cluster node: AP-SOUTHEAST-JKT</span>
+</div>
+<div class="w-full">
+<div class="grid grid-cols-12 bg-surface-container-high px-space-md py-space-xs text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="col-span-2">INCIDENT ID</span>
+<span class="col-span-2">PRIORITY</span>
+<span class="col-span-4">SUMMARY</span>
+<span class="col-span-2">REPORTER</span>
+<span class="col-span-2">STATUS</span>
+</div>
+<div class="grid grid-cols-12 px-space-md py-space-sm bg-surface-container-lowest font-body-sm text-body-sm items-center">
+<span class="col-span-2 font-code-md text-code-md font-semibold text-secondary">INC-2024-8991</span>
+<span class="col-span-2 flex items-center gap-1 text-error font-semibold"><span class="w-2 h-2 rounded-full bg-error"></span> P1 - High</span>
+<span class="col-span-4 truncate text-on-surface">Core database pool exhausted on ERP production</span>
+<span class="col-span-2 text-on-surface-variant">Siti Nurhaliza</span>
+<span class="col-span-2"><span class="bg-surface-container-high text-secondary px-2 py-0.5 rounded font-label-sm text-label-sm">INVESTIGATING</span></span>
+</div>
+<div class="grid grid-cols-12 px-space-md py-space-sm bg-surface-container-low font-body-sm text-body-sm items-center">
+<span class="col-span-2 font-code-md text-code-md font-semibold text-secondary">INC-2024-8989</span>
+<span class="col-span-2 flex items-center gap-1 text-on-surface-variant"><span class="w-2 h-2 rounded-full bg-outline"></span> P3 - Low</span>
+<span class="col-span-4 truncate text-on-surface">Badge access card scanner slow at 4th floor entrance</span>
+<span class="col-span-2 text-on-surface-variant">Agus Pratama</span>
+<span class="col-span-2"><span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded font-label-sm text-label-sm">QUEUED</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- MODAL BACKDROP OVERLAY (Layer 4 Elevation) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-space-md bg-inverse-surface/65 backdrop-blur-sm transition-opacity duration-200" id="modal-container">
+<!-- MODAL DIALOG CONTAINER -->
+<div class="relative w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[942px]">
+<!-- Top Accent Bar: High urgency indicator -->
+<div class="h-1.5 w-full bg-gradient-to-r from-secondary via-secondary-container to-secondary"></div>
+<!-- 1. MODAL HEADER -->
+<div class="px-gutter pt-space-lg pb-space-md bg-surface-container-low/70 flex items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-secondary text-on-secondary flex items-center justify-center shadow-md flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">bolt</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">Create Quick Ticket</h2>
+<span class="bg-error/15 text-error px-space-xs py-0.5 rounded font-label-sm text-label-sm uppercase font-bold tracking-wide">Urgent Incident Entry</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 max-w-xl">
+              Rapid documentation for phone calls, walk-ups, or direct reports. Fill minimal fields to log incident without blocking immediate technical response.
+            </p>
+</div>
+</div>
+<!-- Dismiss and Keyboard Shortcut Info -->
+<div class="flex flex-col items-end gap-1 flex-shrink-0">
+<button aria-label="Close dialog" class="p-1.5 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container-highest transition-colors" id="close-modal-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<span class="font-code-md text-code-md text-outline text-[11px] select-none">ESC to cancel • ⌘+↵ save</span>
+</div>
+</div>
+<!-- 4. CALLOUT / COMPLIANCE BANNER -->
+<div class="mx-gutter mt-space-md px-space-md py-space-sm bg-surface-container rounded-lg flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] flex-shrink-0">bolt</span>
+<p class="font-label-md text-label-md text-on-surface">
+<span class="font-bold text-secondary">Operational Principle:</span> Quick Ticket creates a formal traceable record (<code class="font-code-md text-code-md text-secondary font-semibold">#INC-LIVE</code>) instantly so your phone call assistance is recorded without forcing lengthy assessment forms.
+        </p>
+</div>
+<!-- MODAL BODY / INPUT FORM (Scrollable if constrained) -->
+<div class="px-gutter py-space-md overflow-y-auto flex flex-col gap-space-lg">
+<!-- SECTION A: MINIMAL REQUIRED INPUTS -->
+<div class="flex flex-col gap-space-md">
+<!-- Field 1: Reporter Employee (Required) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-title-md text-title-md text-on-surface flex items-center gap-1" for="reporter-input">
+<span>Reporter Employee</span>
+<span class="text-error font-bold">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-secondary font-semibold cursor-pointer hover:underline flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">phone_in_talk</span> Active Inbound Call Detected
+              </span>
+</div>
+<!-- Autocomplete Container -->
+<div class="relative w-full">
+<div class="w-full bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between gap-space-sm focus-within:bg-surface-container-lowest focus-within:shadow-md transition-all">
+<div class="flex items-center gap-space-sm flex-1 min-w-0">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-title-md text-title-md flex-shrink-0">
+                    RA
+                  </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Rian Ardiansyah</span>
+<span class="font-code-md text-code-md text-on-surface-variant font-medium">(EMP-88421 • Finance &amp; Accounting)</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="bg-surface-container-high text-secondary px-space-xs py-0.5 rounded font-label-sm text-label-sm font-semibold">
+                        Ext. 4022
+                      </span>
+<span class="flex items-center gap-1 font-code-md text-code-md text-outline">
+<span class="material-symbols-outlined text-[14px]">laptop_mac</span> FIN-WS-0412
+                      </span>
+<span class="text-secondary font-label-sm text-label-sm flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Verified Endpoint
+                      </span>
+</div>
+</div>
+</div>
+<button class="text-outline hover:text-error p-1 rounded transition-colors" title="Change Reporter" type="button">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span>
+</button>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Type employee name, NIK, or extension to auto-populate reporter context and device profile.</span>
+</div>
+<!-- Field 2: Incident Summary / Observed Symptom (Required) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-title-md text-title-md text-on-surface flex items-center gap-1" for="incident-summary">
+<span>Incident Summary / Observed Symptom</span>
+<span class="text-error font-bold">*</span>
+</label>
+<span class="font-code-md text-code-md text-outline" id="char-counter">72 / 120</span>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest px-space-md py-space-sm rounded-lg font-body-lg text-body-lg text-on-surface focus:outline-none focus:bg-surface-container-lowest shadow-sm placeholder:text-outline/70 transition-all font-medium" id="incident-summary" maxlength="120" placeholder="What is failing? (e.g., Cannot connect to SAP / Wi-Fi disconnected)" type="text" value="Critical VPN handshake timeout on corporate laptop after gateway patch"/>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[14px]">lightbulb</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Recommended syntax: [Component] + [Symptom / Error message]. Be crisp for the telemetry log.</span>
+</div>
+</div>
+</div>
+<!-- SECTION B: STREAMLINED RAPID TOGGLES & PRIORITY SELECTOR -->
+<div class="bg-surface-container-low/60 rounded-xl p-space-md flex flex-col gap-space-md">
+<!-- Immediate Ownership Checkbox Toggle -->
+<div class="flex items-start gap-space-md bg-surface-container-lowest p-space-sm rounded-lg shadow-sm cursor-pointer select-none" id="assign-me-container">
+<div class="pt-0.5">
+<input checked="" class="w-4 h-4 rounded text-secondary bg-surface-container-lowest focus:ring-0 cursor-pointer accent-secondary" id="assign-to-me" type="checkbox"/>
+</div>
+<div class="flex flex-col flex-1">
+<label class="font-title-md text-title-md text-on-surface cursor-pointer flex items-center gap-2" for="assign-to-me">
+<span>Assign to me immediately (<strong class="text-secondary font-bold">Budi Santoso</strong>)</span>
+<span class="bg-surface-container text-on-surface-variant px-space-xs py-0.5 rounded font-label-sm text-label-sm">Lead Engineer</span>
+</label>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Sets ticket straight to <span class="font-semibold text-secondary">In Progress</span> and assigns technical ownership to you, bypassing the triage backlog.
+              </p>
+</div>
+</div>
+<!-- Quick Pill Priority Selector -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold">
+                Immediate Priority Selection
+              </label>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Optional fast-override</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm" id="priority-selector-group">
+<!-- Low -->
+<button class="priority-btn flex items-center justify-center gap-space-xs py-space-sm px-space-md rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container font-title-md text-title-md transition-all shadow-sm" data-priority="low" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+<span>Low</span>
+</button>
+<!-- Medium -->
+<button class="priority-btn flex items-center justify-center gap-space-xs py-space-sm px-space-md rounded-lg bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container font-title-md text-title-md transition-all shadow-sm" data-priority="medium" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>
+<span>Medium</span>
+</button>
+<!-- High (Selected) -->
+<button class="priority-btn active flex items-center justify-center gap-space-xs py-space-sm px-space-md rounded-lg bg-error text-on-error font-title-md text-title-md font-semibold transition-all shadow-md" data-priority="high" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-on-error animate-ping"></span>
+<span>✓ High Priority (Urgent)</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="material-symbols-outlined text-secondary text-[14px]">volume_up</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                If unselected, ticket will enter Operational Queue awaiting Initial Assessment. High priority triggers 880Hz audio beacon.
+              </p>
+</div>
+</div>
+<!-- Two-column Technical Category and Initial Action -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<!-- Technical Category -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold" for="tech-category">
+                Technical Category
+              </label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-lowest px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none cursor-pointer pr-10" id="tech-category">
+<option selected="">Network &amp; Connectivity (VPN / Wi-Fi / Gateway)</option>
+<option>Identity &amp; Access (Active Directory / SSO / MFA)</option>
+<option>Hardware &amp; Peripherals (Laptop / Dock / Screen)</option>
+<option>Enterprise ERP &amp; Applications (SAP / Oracle / Mail)</option>
+<option>Endpoint Security &amp; Antivirus Shield</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-space-sm pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Quick Work Note / Immediate Action -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold flex items-center justify-between" for="work-note">
+<span>Immediate Action Taken</span>
+<span class="text-outline font-normal font-body-sm text-body-sm lowercase">(optional)</span>
+</label>
+<input class="w-full bg-surface-container-lowest px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface shadow-sm focus:outline-none placeholder:text-outline/70" id="work-note" placeholder="e.g., Instructed user to restart tunnel adapter; pinging radius node..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. MODAL FOOTER ACTION BAR -->
+<div class="px-gutter py-space-md bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<!-- Left Side Telemetry and Audio status -->
+<div class="flex items-center gap-space-sm text-on-surface-variant">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="font-body-sm text-body-sm font-medium">Draft saved locally</span>
+<span class="text-outline">•</span>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-outline">
+<span class="material-symbols-outlined text-[15px]">campaign</span>
+<span>Audio alert will trigger upon submission</span>
+</div>
+</div>
+<!-- Right Side CTA Group -->
+<div class="flex items-center gap-space-md w-full sm:w-auto justify-end">
+<!-- Neutral Cancel Button -->
+<button class="px-space-md py-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface font-title-md text-title-md transition-colors shadow-sm select-none" id="cancel-modal-btn" type="button">
+            Cancel (ESC)
+          </button>
+<!-- Primary CTA Button -->
+<button class="flex items-center gap-space-xs bg-secondary-container hover:bg-secondary text-on-secondary px-space-lg py-space-sm rounded-lg font-title-md text-title-md shadow-md hover:shadow-lg transition-all active:scale-[0.99] select-none" id="submit-ticket-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Create Quick Ticket &amp; Start Work</span>
+<span class="ml-1 bg-surface-container-lowest/25 px-1.5 py-0.5 rounded font-code-md text-code-md text-[11px] font-semibold text-on-secondary">
+              ⌘ ↵
+            </span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function () {
+    // Character counter sync
+    const summaryInput = document.getElementById('incident-summary');
+    const charCounter = document.getElementById('char-counter');
+    if (summaryInput && charCounter) {
+      summaryInput.addEventListener('input', (e) => {
+        const len = e.target.value.length;
+        charCounter.textContent = `${len} / 120`;
+      });
+    }
+
+    // Quick Pill Priority Selector interactive logic
+    const priorityButtons = document.querySelectorAll('.priority-btn');
+    priorityButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        priorityButtons.forEach((b) => {
+          b.classList.remove('bg-error', 'text-on-error', 'bg-secondary', 'text-on-secondary', 'active', 'shadow-md');
+          b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+
+        btn.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        const prio = btn.getAttribute('data-priority');
+        if (prio === 'high') {
+          btn.classList.add('bg-error', 'text-on-error', 'active', 'shadow-md');
+        } else if (prio === 'medium') {
+          btn.classList.add('bg-secondary', 'text-on-secondary', 'active', 'shadow-md');
+        } else {
+          btn.classList.add('bg-surface-container-highest', 'text-on-surface', 'active', 'shadow-md');
+        }
+      });
+    });
+
+    // Keyboard Shortcuts (ESC to dismiss hint, Cmd+Enter to submit)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('modal-container');
+        if (modal) {
+          modal.style.opacity = '0';
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 200);
+        }
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        const submitBtn = document.getElementById('submit-ticket-btn');
+        if (submitBtn) {
+          submitBtn.classList.add('scale-95');
+          setTimeout(() => submitBtn.classList.remove('scale-95'), 150);
+          triggerTicketSubmission();
+        }
+      }
+    });
+
+    // Close Button Handling
+    const closeBtn = document.getElementById('close-modal-btn');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const modalContainer = document.getElementById('modal-container');
+
+    const closeModal = () => {
+      if (modalContainer) {
+        modalContainer.style.opacity = '0';
+        setTimeout(() => {
+          modalContainer.style.display = 'none';
+        }, 200);
+      }
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+    // Audio Feedback & Submission trigger simulation
+    const submitBtn = document.getElementById('submit-ticket-btn');
+    function triggerTicketSubmission() {
+      // Audio synth feedback simulating 880Hz urgent beacon tone
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // 880Hz as designated
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (err) {
+        // Fallback for strict browser autoplay policies
+      }
+
+      if (submitBtn) {
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[18px] animate-spin">refresh</span>
+          <span>Registering Live Ticket...</span>
+        `;
+        setTimeout(() => {
+          submitBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+            <span>INC-2024-8992 Created!</span>
+          `;
+          submitBtn.classList.remove('bg-secondary-container');
+          submitBtn.classList.add('bg-secondary');
+          setTimeout(closeModal, 600);
+        }, 500);
+      }
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', triggerTicketSubmission);
+    }
+  })();
+</script></main></div></body></html>

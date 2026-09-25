@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary-container": "#7c839b", "surface-container-high": "#dce9ff", "on-tertiary": "#ffffff", "primary-fixed-dim": "#bec6e0", "on-primary-fixed-variant": "#3f465c", "on-surface": "#0b1c30", "tertiary-fixed": "#d5e3fc", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-tertiary-container": "#77859a", "surface-container-lowest": "#ffffff", "surface": "#f8f9ff", "surface-variant": "#d3e4fe", "on-secondary-container": "#fefcff", "surface-container": "#e5eeff", "secondary": "#0051d5", "on-tertiary-fixed-variant": "#3a485b", "on-primary-fixed": "#131b2e", "on-tertiary-fixed": "#0d1c2e", "surface-container-highest": "#d3e4fe", "on-surface-variant": "#45464d", "tertiary-fixed-dim": "#b9c7df", "error-container": "#ffdad6", "tertiary-container": "#0d1c2e", "background": "#f8f9ff", "surface-container-low": "#eff4ff", "outline": "#76777d", "outline-variant": "#c6c6cd", "inverse-on-surface": "#eaf1ff", "tertiary": "#000000", "secondary-container": "#316bf3", "inverse-primary": "#bec6e0", "surface-tint": "#565e74", "surface-dim": "#cbdbf5", "on-background": "#0b1c30", "primary": "#000000", "secondary-fixed": "#dbe1ff", "on-primary": "#ffffff", "on-error": "#ffffff", "on-secondary": "#ffffff", "inverse-surface": "#213145", "on-secondary-fixed": "#00174b", "primary-container": "#131b2e", "primary-fixed": "#dae2fd", "on-secondary-fixed-variant": "#003ea8", "surface-bright": "#f8f9ff", "on-error-container": "#93000a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-sm": "0.5rem", "space-xl": "2rem", "space-xs": "0.25rem", "margin": "1.5rem", "space-md": "0.75rem", "gutter": "1rem", "space-lg": "1.25rem" }, "fontFamily": { "title-md": [ "Inter" ], "headline-md": [ "Inter" ], "body-lg": [ "Inter" ], "display-lg": [ "Inter" ], "body-sm": [ "Inter" ], "body-md": [ "Inter" ], "headline-lg": [ "Inter" ], "code-md": [ "JetBrains Mono" ], "label-sm": [ "Inter" ], "label-md": [ "Inter" ], "headline-sm": [ "Inter" ] }, "fontSize": { "title-md": [ "14px", { "lineHeight": "20px", "fontWeight": "600" } ], "headline-md": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "fontWeight": "400" } ], "display-lg": [ "30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "body-sm": [ "12px", { "lineHeight": "16px", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "20px", "fontWeight": "400" } ], "headline-lg": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "code-md": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "label-md": [ "13px", { "lineHeight": "16px", "fontWeight": "500" } ], "headline-sm": [ "16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 h-16 bg-primary-container z-50 px-gutter flex items-center justify-between border-b border-primary-container/40"><div class="flex items-center gap-space-md"><img alt="Enterprise IT Service Console geometric shield and checkmark vector logo mark in slate blue and cobalt blue.. Brand logo. - Primary color: #0f172a - Font: inter - Mode: light - Roundness: rounded-sm" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XZO1XYcvxp2bVM-jPzJK0fcv1xz0DWcnF-RIeazYoLrUGfm76KdQMF1BBgBSOKaPFIbkXZ1XcXb-UU-iru-aWLaa8V--m8ZlAA5FMF9b_k_bB6GWklJ2yVHZ49o1bkzhYKPLMJSp5CQ3jNehMOHC4cZ10BY_JXamM2uF4mIXiAVftM6Elsdc9CQ4jV9u9XRtG01VL9o5vIhpcAbw--GZU6ulCG46biLqwrCfmzhSPJACxFMi64FlUWcIbe"/><div class="flex flex-col"><span class="font-title-md text-title-md text-inverse-on-surface tracking-tight leading-none">IT Service Console</span><span class="font-label-sm text-label-sm text-on-primary-container tracking-widest font-semibold">OPERATIONS CONSOLE</span></div><div class="h-6 w-px bg-outline/20 mx-space-xs"></div><div class="flex items-center gap-space-xs bg-tertiary-container/80 px-space-sm py-space-xs rounded border border-outline/30"><span class="material-symbols-outlined text-secondary text-[16px]">badge</span><span class="font-label-sm text-label-sm text-on-primary-fixed">Logged as: <strong class="text-inverse-on-surface font-semibold">IT Staff (Budi Santoso - IT Infrastructure)</strong></span></div></div><div class="flex items-center gap-space-md"><button class="flex items-center gap-space-xs bg-secondary-container hover:bg-secondary text-on-secondary px-space-md py-space-xs rounded font-title-md text-title-md shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">add_circle</span><span>+ Quick Ticket</span></button><div class="flex items-center gap-space-xs bg-surface-container-highest/20 px-space-sm py-space-xs rounded text-inverse-on-surface"><span class="material-symbols-outlined text-secondary text-[16px]">volume_up</span><span class="font-code-md text-code-md">Audio Alerts: Active (880Hz)</span></div><button class="relative p-space-xs text-inverse-on-surface hover:text-white rounded hover:bg-white/10 transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 bg-error text-on-error font-label-sm text-label-sm font-bold rounded-full">3</span></button><div class="h-6 w-px bg-outline/20"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right hidden sm:flex"><span class="font-title-md text-title-md text-inverse-on-surface leading-tight">Budi Santoso</span><span class="font-label-sm text-label-sm text-on-primary-container">Senior IT Systems Engineer</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-60 bg-surface-container-low border-r border-outline-variant/50 z-40 flex flex-col justify-between overflow-y-auto"><div class="p-space-sm flex flex-col gap-space-sm"><button class="w-full flex items-center justify-center gap-space-xs bg-secondary text-on-secondary py-space-xs rounded font-title-md text-title-md hover:bg-secondary-container transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">bolt</span><span>+ Quick Ticket</span></button><div class="px-space-xs pt-space-xs pb-space-xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">Queues &amp; Telemetry</span></div><nav class="flex flex-col gap-0.5" data-active-classes="bg-surface-container-high text-secondary font-title-md font-semibold border-l-2 border-secondary"><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="operational-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">view_list</span><span class="font-label-md text-label-md">Operational Queue</span></div><span class="bg-secondary/15 text-secondary px-space-xs py-0.5 rounded font-label-sm text-label-sm font-bold">8</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="initial-assessment" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">assignment_late</span><span class="font-label-md text-label-md">Initial Assessment</span></div><span class="bg-error/10 text-error px-space-xs py-0.5 rounded font-label-sm text-label-sm font-bold">2</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="my-assigned-tickets" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">assignment_ind</span><span class="font-label-md text-label-md">My Assigned Tickets</span></div><span class="bg-surface-container-highest text-on-surface px-space-xs py-0.5 rounded font-label-sm text-label-sm font-semibold">4</span></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="incident-archive" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">archive</span><span class="font-label-md text-label-md">Incident Archive / History</span></div></a><a class="flex items-center justify-between px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="notification-log" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">notifications_active</span><span class="font-label-md text-label-md">Notification Log</span></div></a></nav></div><div class="p-space-sm border-t border-outline-variant/40 bg-surface-container/40 flex flex-col gap-space-xs"><div class="flex flex-col gap-0.5"><div class="flex items-center justify-between text-on-surface-variant"><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider">Audio Alert Settings</span><span class="material-symbols-outlined text-[14px]">tune</span></div><div class="grid grid-cols-3 gap-1 pt-1"><div class="flex flex-col items-center justify-center p-1 bg-surface-container-lowest border border-outline-variant rounded text-center"><span class="font-label-sm text-label-sm font-semibold">Low</span><span class="font-code-md text-code-md text-[10px] text-on-surface-variant">440Hz</span></div><div class="flex flex-col items-center justify-center p-1 bg-surface-container-high border border-secondary rounded text-center"><span class="font-label-sm text-label-sm font-semibold text-secondary">Med</span><span class="font-code-md text-code-md text-[10px] text-secondary">880Hz</span></div><div class="flex flex-col items-center justify-center p-1 bg-surface-container-lowest border border-outline-variant rounded text-center"><span class="font-label-sm text-label-sm font-semibold">High</span><span class="font-code-md text-code-md text-[10px] text-on-surface-variant">1200Hz</span></div></div></div><div class="flex items-center gap-space-xs pt-space-xs"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">System Status: All Operational</span></div></div></aside><div class="pl-60"><main class="w-full min-h-screen pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-Header Workspace Anchor & Breadcrumbs -->
+<div class="w-full bg-surface-container-lowest px-gutter py-space-md shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<!-- Title & Context Area -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm uppercase tracking-wider">
+<span>OPERATIONS DESK</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-secondary font-semibold">Incident Traceability &amp; Audit Archive</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">
+            Incident History &amp; Audit Traceability
+          </h1>
+<!-- Immutable Audit Badge -->
+<div class="flex items-center gap-1.5 px-space-sm py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span>
+<span class="font-code-md text-code-md tracking-tight font-medium text-secondary">IMMUTABLE APPEND-ONLY AUDIT TRAIL</span>
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+<span class="font-code-md text-[11px] text-on-surface-variant font-medium">SHA-256 VERIFIED</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="flex items-center gap-space-xs bg-surface-container hover:bg-surface-container-high text-on-surface px-space-md py-space-xs rounded font-title-md text-title-md transition-all shadow-sm" id="btn-export-audit" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">sim_card_download</span>
+<span>Export Audit Report (PDF/CSV)</span>
+</button>
+<button class="flex items-center gap-space-xs bg-primary hover:bg-inverse-surface text-on-primary px-space-md py-space-xs rounded font-title-md text-title-md transition-all shadow-sm" id="btn-audit-settings" type="button">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span>Audit Log Settings</span>
+</button>
+</div>
+</div>
+<!-- Live Telemetry KPI Strip -->
+<div class="grid grid-cols-2 md:grid-cols-5 gap-space-sm mt-space-md pt-space-sm bg-surface-container-low p-space-sm rounded">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Total Archived Incidents</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">1,428</span>
+<span class="font-code-md text-code-md text-on-surface-variant">records</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Closed via Verification</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-secondary font-bold">92.4%</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">(1,319)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Disputed &amp; Reworked</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">7.6%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(109)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Mean Time to Res. (MTTR)</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-on-surface font-bold font-code-md">42m 18s</span>
+<span class="material-symbols-outlined text-[15px] text-secondary">trending_down</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Zero Untracked Invariant</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md text-secondary font-bold">100%</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase">Compliant</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Investigation & Precision Filtering Bar -->
+<div class="w-full px-gutter py-space-sm bg-surface-container-lowest shadow-sm mt-1">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center">
+<!-- Search Field with Monospace Hotkey Hint -->
+<div class="md:col-span-4 relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-sm text-[18px] text-outline">search</span>
+<input class="w-full bg-surface-container-low pl-9 pr-14 py-space-xs text-on-surface placeholder:text-outline text-body-md font-body-md rounded focus:outline-none focus:bg-surface-container-lowest" id="audit-search" placeholder="Search Ticket ID (#INC-XXXX), Actor ID, Hostname, Event Code..." type="text"/>
+<span class="absolute right-2 px-1.5 py-0.5 rounded bg-surface-container-high font-code-md text-[10px] text-on-surface-variant uppercase font-semibold">Ctrl+K</span>
+</div>
+<!-- Event Type Filter -->
+<div class="md:col-span-2">
+<select class="w-full bg-surface-container-low text-on-surface px-space-sm py-space-xs rounded font-body-sm text-body-sm focus:outline-none">
+<option value="ALL">All Event Types (10 Canonical)</option>
+<option value="TICKET_CREATED">TICKET_CREATED</option>
+<option value="PRIORITY_ASSESSED">PRIORITY_ASSESSED</option>
+<option value="TICKET_ASSIGNED">TICKET_ASSIGNED</option>
+<option value="WORK_NOTE_ADDED">WORK_NOTE_ADDED</option>
+<option value="RESOLUTION_SUBMITTED">RESOLUTION_SUBMITTED</option>
+<option value="VERIFICATION_ACCEPTED">VERIFICATION_ACCEPTED</option>
+<option value="VERIFICATION_DISPUTED">VERIFICATION_DISPUTED</option>
+<option value="TICKET_CLOSED">TICKET_CLOSED</option>
+</select>
+</div>
+<!-- Lifecycle Stage -->
+<div class="md:col-span-2">
+<select class="w-full bg-surface-container-low text-on-surface px-space-sm py-space-xs rounded font-body-sm text-body-sm focus:outline-none">
+<option value="ALL">All Stages (Stage 1 to 10)</option>
+<option value="S1">Stage 1: Report</option>
+<option value="S2">Stage 2: Notification</option>
+<option value="S3">Stage 3: Operational Queue</option>
+<option value="S4">Stage 4: Initial Assessment</option>
+<option value="S5">Stage 5: Assignment</option>
+<option value="S6">Stage 6: In Progress</option>
+<option value="S7">Stage 7: Resolution</option>
+<option value="S8">Stage 8: Employee Notice</option>
+<option value="S9">Stage 9: Verification</option>
+<option value="S10">Stage 10: Closed &amp; Locked</option>
+</select>
+</div>
+<!-- Actor Role -->
+<div class="md:col-span-2">
+<select class="w-full bg-surface-container-low text-on-surface px-space-sm py-space-xs rounded font-body-sm text-body-sm focus:outline-none">
+<option value="ALL">Actor: All Roles</option>
+<option value="EMPLOYEE">Employee (Reporter)</option>
+<option value="IT_STAFF">IT Staff (Assignee/Technician)</option>
+<option value="AUTOMATION">System Automation (Cron/Daemon)</option>
+</select>
+</div>
+<!-- Date Range Selector -->
+<div class="md:col-span-2 flex items-center justify-between bg-surface-container-low px-space-sm py-space-xs rounded text-body-sm text-on-surface">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-secondary">date_range</span>
+<span class="truncate font-body-sm">Oct 1 - Oct 31, 2024</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Main Investigation Canvas (Two Columns) -->
+<div class="p-gutter grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- LEFT PANEL: Chronological Immutable Event Audit Stream (60%) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<!-- Ticket Context Banner (Selected Subject) -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-code-md text-code-md font-bold bg-surface-container-high px-space-xs py-0.5 rounded text-secondary">#INC-1042</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Dual Monitor HDMI Display Flickering &amp; Docking Dropouts</span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm mt-0.5 flex-wrap">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-outline">person</span>
+<span>Reporter: <strong>Rian Ardiansyah</strong> (EMP-88421, Finance)</span>
+</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-outline">engineering</span>
+<span>Assignee: <strong>Budi Santoso</strong> (Sr Systems Eng)</span>
+</span>
+</div>
+</div>
+<!-- Terminal Status Seal -->
+<div class="flex sm:flex-col items-end gap-1 shrink-0">
+<div class="flex items-center gap-1 px-space-sm py-0.5 rounded bg-inverse-surface text-inverse-on-surface font-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">lock</span>
+<span>CLOSED (LOCKED)</span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant font-semibold">Priority: Medium (880Hz)</span>
+</div>
+</div>
+<!-- Hash Traceability Fingerprint -->
+<div class="mt-space-sm pt-space-xs bg-surface-container-low px-space-sm py-space-xs rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-1 text-on-surface-variant font-code-md text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-secondary">fingerprint</span>
+<span>Block Hash:</span>
+<span class="text-on-surface font-bold">0x9c48...38a2e1f409</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span>Root Merkle Tree: Synced</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-code-md text-secondary font-semibold">Total Events: 10</span>
+</div>
+</div>
+</div>
+<!-- Chronological Event Stream Container -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">history_toggle_off</span>
+<h2 class="font-title-md text-title-md text-on-surface uppercase tracking-wider font-bold">
+              Immutable Audit Events (Reverse Chronological Order)
+            </h2>
+</div>
+<span class="font-code-md text-code-md text-on-surface-variant">Timezone: UTC+07:00 (WIB)</span>
+</div>
+<!-- Timeline Flow List -->
+<div class="relative flex flex-col gap-space-md mt-space-sm">
+<!-- EVENT 1: Stage 10 Terminal -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">TICKET_CLOSED &amp; LOCKED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-inverse-surface text-inverse-on-surface font-semibold">Stage 10: Closed</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>System Daemon</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 10:48:12 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Ticket #INC-1042 has finalized all life-cycle states. Terminal lock engaged; state transitions and field mutations permanently sealed.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "state_transition": "Verification -&gt; Closed",
+  "auto_closure_enforced": false,
+  "closure_trigger": "Employee Accept Fix",
+  "locked_timestamp": "2024-10-31T10:48:12Z",
+  "tamper_proof_checksum": "a8fbc78921e041db937"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 2: Stage 9 Verification Accepted -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">thumb_up</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">VERIFICATION_ACCEPTED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold">Stage 9: Verification</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Rian Ardiansyah (EMP-88421)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 10:47:55 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Employee confirmed ticket resolution via verification modal. Star rating 5/5 submitted.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "verification_action": "CONFIRM_AND_CLOSE",
+  "feedback_rating": 5,
+  "user_comment": "HDMI 2.1 cable and firmware update resolved the flicker completely on both Dell 4K screens. Thank you Budi!",
+  "client_auth": "SSO_TOKEN_ACTIVE"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 3: Stage 8 Employee Notice -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">notifications_active</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">TRANSITION_TO_VERIFICATION &amp; NOTIFIED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-semibold">Stage 8: Notice</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>System Automation</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 10:02:10 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Persistent verification badge pushed to employee portal view with 48h auto-close timer initialized.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "visual_badge_dispatched": true,
+  "recipient_id": "EMP-88421",
+  "auto_close_expiry": "2024-11-02T10:02:10Z",
+  "persistent_unread_state": true
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 4: Stage 7 Resolution Submitted -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">fact_check</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">RESOLUTION_SUBMITTED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-semibold">Stage 7: Resolution</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Budi Santoso (IT Staff)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 10:01:45 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Mandatory resolution notes submitted with root cause classification. Guard rails validated note length (&gt;20 chars).
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "root_cause": "Hardware Cable Degradation &amp; Outdated WD19TBS Dock Firmware",
+  "resolution_notes": "Replaced high-speed HDMI 2.1 cable, flashed dock firmware to v01.00.25, verified 4K@60Hz signal stability under load.",
+  "mandatory_notes_guard": "PASSED"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 5: Stage 6 Work Note Added -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">WORK_NOTE_ADDED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-semibold">Stage 6: In Progress</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Budi Santoso (IT Staff)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:35:10 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Field progress entry recorded during desk dispatch.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "note_excerpt": "On-site desk visit. Identified damaged pin on HDMI cable. Running hardware diagnostic on Dell WD19TBS docking station.",
+  "visibility": "PUBLIC_TO_EMPLOYEE"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 6: Stage 5 Assignment -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">assignment_ind</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">TICKET_ASSIGNED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-semibold">Stage 5: Assignment</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Budi Santoso (IT Staff)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:20:04 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Clear ownership invariant enforced. Engineer claimed ticket from Operational Queue.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "previous_assignee": null,
+  "new_assignee": "Budi Santoso (EMP-77102)",
+  "clear_ownership_invariant": "SATISFIED"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 7: Stage 4 Priority Assessed -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">PRIORITY_ASSESSED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-semibold">Stage 4: Initial Assessment</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Budi Santoso (IT Staff)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:18:22 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Priority assessed from Unrated to Medium (880Hz Audio Tone assigned). SLA timer initialized to 4 hours.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "previous_priority": null,
+  "assigned_priority": "Medium",
+  "audio_beacon_frequency": "880Hz",
+  "secondary_impact": "Single Workstation Productivity Degradation"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 8: Stage 3 Transition to Operational Queue -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">view_list</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">TRANSITION_TO_OPERATIONAL_QUEUE</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-semibold">Stage 3: Operational Queue</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>System Automation</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:15:30 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Incident queued into Global Unassigned Workpool for Level 2 Network/Peripherals team.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "shared_queue_entry": true,
+  "unassigned_flag": true
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 9: Stage 2 Notification Triggered -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">volume_up</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-high mt-1"></div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">NOTIFICATION_TRIGGERED</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-semibold">Stage 2: Notification</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>System Automation</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:14:10 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Real-time operational alerts dispatched to on-duty staff consoles with audio telemetry flags.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "alert_type": "NEW_INCIDENT_REPORTED",
+  "visual_badge_broadcast": "IT_STAFF_ALL",
+  "sound_state": "PRE_ASSESSMENT_SILENT"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- EVENT 10: Stage 1 Report Created -->
+<div class="flex gap-space-md items-start group">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+</div>
+</div>
+<div class="flex-1 bg-surface-container-low p-space-sm rounded transition-all hover:bg-surface-container">
+<div class="flex flex-wrap items-center justify-between gap-1 pb-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-code-md text-code-md font-bold text-on-surface bg-surface-container-highest px-1.5 py-0.5 rounded">TICKET_CREATED_SELF_SERVICE</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-semibold">Stage 1: Report</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">by <strong>Rian Ardiansyah (EMP-88421)</strong></span>
+</div>
+<span class="font-code-md text-[11px] text-on-surface-variant">Today, 09:14:02 WIB</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+                Self-service submission via Employee Portal. Category: Hardware &amp; Peripheral.
+              </p>
+<div class="mt-space-xs p-space-xs rounded bg-surface-container-lowest font-code-md text-[11px] text-on-surface-variant overflow-x-auto">
+<pre class="leading-tight"><code>{
+  "reporter_id": "EMP-88421",
+  "category": "Hardware &amp; Peripheral",
+  "summary": "Dual Monitor HDMI Display Flickering",
+  "client_ip": "10.14.88.204"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: Investigation Controls, Integrity Card, and Archived Browser (40%) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- CARD 1: Cryptographic Integrity & Compliance Seal -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-secondary">encrypted</span>
+<span class="font-title-md text-title-md font-bold text-on-surface">Cryptographic Verification</span>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm font-bold">VERIFIED</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Every audit entry is cryptographically linked in a chained append-only ledger complying with enterprise governance (FR-18).
+        </p>
+<div class="mt-space-sm p-space-sm bg-surface-container-low rounded flex flex-col gap-2">
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant uppercase font-semibold">Ledger Root Block:</span>
+<span class="font-code-md text-on-surface font-semibold">#BLOCK-20241031-ROOT</span>
+</div>
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant uppercase font-semibold">Record Mutation Policy:</span>
+<span class="font-code-md text-error font-semibold">APPEND-ONLY IMMUTABLE</span>
+</div>
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant uppercase font-semibold">Audit Operator Signature:</span>
+<span class="font-code-md text-secondary truncate max-w-[180px]">SEC-KEY-9941a02b</span>
+</div>
+</div>
+<button class="w-full mt-space-sm py-space-xs bg-surface-container-high hover:bg-surface-container text-secondary rounded font-title-md text-title-md flex items-center justify-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Validate Chain Hashes</span>
+</button>
+</div>
+<!-- CARD 2: Historical Finalized & Closed Incidents Browser -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">inventory_2</span>
+<span class="font-title-md text-title-md font-bold text-on-surface">Archived Incident Browser</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 Selected / 1,428</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Click any historical incident below to inspect its cryptographic immutable audit trace.
+        </p>
+<!-- Archived List Table -->
+<div class="mt-space-sm flex flex-col gap-1">
+<!-- Item 1 (Active Focused) -->
+<div class="p-space-xs bg-surface-container-high rounded cursor-pointer transition-all flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-code-md text-code-md font-bold text-secondary">#INC-1042</span>
+<span class="font-label-sm text-[10px] px-1 py-0.2 rounded bg-surface-container-lowest text-secondary font-bold">CURRENT</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Verified by Emp</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface truncate">Dual Monitor HDMI Display Flickering</span>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Assignee: <strong>Budi S.</strong></span>
+<span class="font-code-md">Today, 10:48 WIB</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-xs bg-surface-container-low hover:bg-surface-container rounded cursor-pointer transition-all flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface">#INC-1040</span>
+<span class="font-label-sm text-[11px] text-secondary font-semibold">Verified by Emp</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Outlook Mailbox Quota Full Alert</span>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Assignee: <strong>Siti R.</strong></span>
+<span class="font-code-md">Yesterday, 16:12 WIB</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-space-xs bg-surface-container-low hover:bg-surface-container rounded cursor-pointer transition-all flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface">#INC-1038</span>
+<span class="font-label-sm text-[11px] text-outline font-semibold">Auto-Closed (48h)</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">SAP GUI DLL Missing on Windows 11</span>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Assignee: <strong>Siti R.</strong></span>
+<span class="font-code-md">Oct 29, 14:05 WIB</span>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-space-xs bg-surface-container-low hover:bg-surface-container rounded cursor-pointer transition-all flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface">#INC-1035</span>
+<span class="font-label-sm text-[11px] text-secondary font-semibold">Verified by Emp</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Cisco AnyConnect Certificate Expiry</span>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Assignee: <strong>Kevin T.</strong></span>
+<span class="font-code-md">Oct 28, 11:20 WIB</span>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="p-space-xs bg-surface-container-low hover:bg-surface-container rounded cursor-pointer transition-all flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface">#INC-1031</span>
+<span class="font-label-sm text-[11px] text-error font-semibold">Disputed then Accepted</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Network Share Z: Drive Disconnected</span>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Assignee: <strong>Budi S.</strong></span>
+<span class="font-code-md">Oct 27, 09:14 WIB</span>
+</div>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between">
+<span class="font-code-md text-code-md text-on-surface-variant">Showing 1 - 5 of 1,428</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="p-1 rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 3: Historical Lifecycle SLA & Velocity Breakdown -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-secondary">speed</span>
+<span class="font-title-md text-title-md font-bold text-on-surface">Lifecycle SLA &amp; Velocity</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold">100% In-Target</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Segment breakdown for ticket <span class="font-code-md font-bold text-on-surface">#INC-1042</span>:
+        </p>
+<div class="mt-space-sm flex flex-col gap-space-xs">
+<!-- Step 1-4 Triage Velocity -->
+<div class="flex flex-col gap-1 p-space-xs bg-surface-container-low rounded">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Stage 1-4: Triage &amp; Assessment Velocity</span>
+<span class="font-code-md font-bold text-on-surface">4m 20s</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 25%"></div>
+</div>
+<span class="font-code-md text-[10px] text-on-surface-variant">Target: &lt; 15m (10.4m ahead)</span>
+</div>
+<!-- Step 5-7 Remediation Velocity -->
+<div class="flex flex-col gap-1 p-space-xs bg-surface-container-low rounded">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Stage 5-7: Remediation &amp; Resolution</span>
+<span class="font-code-md font-bold text-on-surface">41m 41s</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 65%"></div>
+</div>
+<span class="font-code-md text-[10px] text-on-surface-variant">Target: &lt; 4h 00m (3h 18m ahead)</span>
+</div>
+<!-- Step 8-10 Verification Sign-Off Velocity -->
+<div class="flex flex-col gap-1 p-space-xs bg-surface-container-low rounded">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Stage 8-10: Employee Verification Sign-Off</span>
+<span class="font-code-md font-bold text-on-surface">46m 02s</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full" style="width: 48%"></div>
+</div>
+<span class="font-code-md text-[10px] text-on-surface-variant">Auto-close threshold: 48h (Resolved proactively)</span>
+</div>
+</div>
+<!-- Total Lifespan Badge -->
+<div class="mt-space-md p-space-sm bg-surface-container-high rounded flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase font-bold text-on-surface">Total Lifespan (Creation to Lock)</span>
+<span class="font-headline-sm text-headline-sm font-code-md font-bold text-secondary">1h 32m 03s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for search focus hotkey (Ctrl+K)
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const searchInput = document.getElementById('audit-search');
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    }
+  });
+
+  // Export report simulation feedback
+  const exportBtn = document.getElementById('btn-export-audit');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const originalText = exportBtn.innerHTML;
+      exportBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span><span>Generating Signed Report...</span>';
+      setTimeout(() => {
+        exportBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] text-secondary">check</span><span>Export Complete (SHA-256 Valid)</span>';
+        setTimeout(() => {
+          exportBtn.innerHTML = originalText;
+        }, 2500);
+      }, 1000);
+    });
+  }
+</script></main></div></body></html>
