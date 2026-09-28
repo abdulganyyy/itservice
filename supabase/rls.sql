@@ -4,10 +4,14 @@
 -- ==============================================================================
 
 -- 1. Helper Security Function: Get Authenticated User Role
+-- Uses explicit search_path to prevent search_path hijacking vulnerabilities
 CREATE OR REPLACE FUNCTION public.get_current_user_role()
 RETURNS VARCHAR AS $$
     SELECT role FROM public.users WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+$$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.get_current_user_role() FROM public;
+GRANT EXECUTE ON FUNCTION public.get_current_user_role() TO authenticated;
 
 -- ==============================================================================
 -- 2. ENABLE ROW LEVEL SECURITY ON ALL DOMAIN TABLES
@@ -22,18 +26,25 @@ ALTER TABLE public.ticket_history ENABLE ROW LEVEL SECURITY;
 -- ==============================================================================
 
 -- 3.1 SELECT: Authenticated users can view all users
--- Needed for assignee display, assignment dropdowns, and reporter lookups
+-- Required for assignee display, assignment dropdowns, and reporter lookups
 DROP POLICY IF EXISTS "users_select_all_authenticated" ON public.users;
 CREATE POLICY "users_select_all_authenticated" ON public.users
 FOR SELECT TO authenticated
 USING (TRUE);
 
 -- 3.2 UPDATE: Users can only update their own profile record
+-- Role escalation is strictly blocked at both RLS (WITH CHECK) and Trigger levels
 DROP POLICY IF EXISTS "users_update_own_profile" ON public.users;
 CREATE POLICY "users_update_own_profile" ON public.users
 FOR UPDATE TO authenticated
 USING (id = auth.uid())
-WITH CHECK (id = auth.uid());
+WITH CHECK (
+    id = auth.uid()
+    AND role = (SELECT u.role FROM public.users u WHERE u.id = auth.uid())
+);
+
+-- Note: No INSERT policy for public.users via client API.
+-- New users are inserted strictly via on_auth_user_created trigger from auth.users.
 
 -- ==============================================================================
 -- 4. POLICIES FOR: tickets
@@ -50,18 +61,35 @@ USING (
 );
 
 -- 4.2 INSERT Policy:
--- Employees can report for self; IT Staff can report Quick Tickets on behalf of others
+-- Employees: Can only report for self, cannot assign, cannot set priority, cannot pre-close
+-- IT Staff: Can create Quick Tickets on behalf of employees with allowed initial states
 DROP POLICY IF EXISTS "tickets_insert_policy" ON public.tickets;
 CREATE POLICY "tickets_insert_policy" ON public.tickets
 FOR INSERT TO authenticated
 WITH CHECK (
-    (public.get_current_user_role() = 'Employee' AND reporter_id = auth.uid())
-    OR (public.get_current_user_role() = 'IT Staff')
+    -- Employee self-service path
+    (
+        public.get_current_user_role() = 'Employee'
+        AND reporter_id = auth.uid()
+        AND assignee_id IS NULL
+        AND priority IS NULL
+        AND status IN ('Report', 'Operational Queue')
+        AND resolution_notes IS NULL
+        AND verification_feedback IS NULL
+        AND closed_at IS NULL
+    )
+    -- IT Staff quick-ticket path
+    OR (
+        public.get_current_user_role() = 'IT Staff'
+        AND status IN ('Report', 'Operational Queue', 'In Progress')
+        AND resolution_notes IS NULL
+        AND closed_at IS NULL
+    )
 );
 
 -- 4.3 UPDATE Policy:
--- Employee can only update own tickets during 'Verification' (Accept -> Closed, Dispute -> In Progress).
--- IT Staff can update tickets along operational workflows.
+-- Employee: Can only update own tickets during 'Verification' (Accept -> Closed, Dispute -> In Progress)
+-- IT Staff: Can update active tickets (resolution submission guarded by trigger to active assignee)
 DROP POLICY IF EXISTS "tickets_update_policy" ON public.tickets;
 CREATE POLICY "tickets_update_policy" ON public.tickets
 FOR UPDATE TO authenticated
@@ -96,11 +124,22 @@ USING (target_user_id = auth.uid())
 WITH CHECK (target_user_id = auth.uid());
 
 -- 5.3 INSERT Policy:
--- Authenticated actors and system triggers can insert notifications for target recipients
-DROP POLICY IF EXISTS "notifications_insert_authenticated" ON public.notifications;
-CREATE POLICY "notifications_insert_authenticated" ON public.notifications
+-- Users cannot spam arbitrary notifications. Insertion is restricted to participants of the ticket.
+DROP POLICY IF EXISTS "notifications_insert_policy" ON public.notifications;
+CREATE POLICY "notifications_insert_policy" ON public.notifications
 FOR INSERT TO authenticated
-WITH CHECK (auth.role() = 'authenticated');
+WITH CHECK (
+    EXISTS (
+        SELECT 1 FROM public.tickets t
+        WHERE t.id = notifications.source_ticket_id
+        AND (
+            -- IT Staff notifying reporter or assignee of ticket
+            (public.get_current_user_role() = 'IT Staff' AND (t.reporter_id = notifications.target_user_id OR t.assignee_id = notifications.target_user_id))
+            -- Employee notifying assignee of their own reported ticket
+            OR (public.get_current_user_role() = 'Employee' AND t.reporter_id = auth.uid() AND t.assignee_id = notifications.target_user_id)
+        )
+    )
+);
 
 -- ==============================================================================
 -- 6. POLICIES FOR: ticket_history
@@ -121,13 +160,21 @@ USING (
 );
 
 -- 6.2 INSERT Policy:
--- Authenticated users can record history logs with their own actor_id
+-- Actor ID MUST match authenticated user, and user must have permission to access that ticket
 DROP POLICY IF EXISTS "ticket_history_insert_policy" ON public.ticket_history;
 CREATE POLICY "ticket_history_insert_policy" ON public.ticket_history
 FOR INSERT TO authenticated
 WITH CHECK (
     auth.role() = 'authenticated'
     AND actor_id = auth.uid()
+    AND (
+        public.get_current_user_role() = 'IT Staff'
+        OR EXISTS (
+            SELECT 1 FROM public.tickets t
+            WHERE t.id = ticket_history.ticket_id
+            AND t.reporter_id = auth.uid()
+        )
+    )
 );
 
--- Note: No UPDATE or DELETE policy exists for ticket_history (Append-only enforced).
+-- Note: No UPDATE or DELETE policy exists for ticket_history (Append-only enforced by trigger & RLS).

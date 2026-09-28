@@ -1,17 +1,11 @@
 -- ==============================================================================
 -- INTERNAL IT SERVICE PLATFORM - CORE V1 DATABASE DDL SCHEMA
--- Specification Source: docs/analysis/database-schema.md
+-- Specification Source: docs/analysis/database-schema.md & permissions.md
 -- ==============================================================================
 
 -- 1. Enable Required PostgreSQL Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
--- Clean teardown (for fresh rebuilds if needed)
--- DROP TABLE IF EXISTS public.ticket_history CASCADE;
--- DROP TABLE IF EXISTS public.notifications CASCADE;
--- DROP TABLE IF EXISTS public.tickets CASCADE;
--- DROP TABLE IF EXISTS public.users CASCADE;
 
 -- ==============================================================================
 -- 2. TABLE DEFINITIONS
@@ -19,15 +13,16 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- 2.1 Table: users
 -- Represents authenticated organizational users with strictly two canonical roles (FR-02)
+-- Explicitly references auth.users(id) to maintain 1-to-1 parity between Auth & Public schema
 CREATE TABLE IF NOT EXISTS public.users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     full_name VARCHAR(150) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     role VARCHAR(20) NOT NULL CHECK (role IN ('Employee', 'IT Staff')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-COMMENT ON TABLE public.users IS 'Stores user identity and strictly enforces dual roles (Employee vs IT Staff)';
+COMMENT ON TABLE public.users IS 'Stores user profile linked to auth.users and strictly enforces dual roles (Employee vs IT Staff)';
 
 -- 2.2 Table: tickets
 -- Central transactional entity for IT incidents across 10 canonical stages (FR-11)
@@ -119,17 +114,91 @@ CREATE INDEX IF NOT EXISTS idx_ticket_history_timeline ON public.ticket_history 
 CREATE INDEX IF NOT EXISTS idx_tickets_verification_timeout ON public.tickets (verification_started_at) WHERE status = 'Verification';
 
 -- ==============================================================================
--- 4. SYSTEM INVARIANT GUARDS (DATABASE TRIGGERS)
+-- 4. SYSTEM INVARIANT GUARDS & AUTH SYNCHRONIZATION TRIGGERS
 -- ==============================================================================
 
--- Function 4.1: Enforce Ticket Lifecycle Invariants & Guards
+-- 4.1 Trigger Function: Synchronize auth.users into public.users
+CREATE OR REPLACE FUNCTION public.handle_new_auth_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_role VARCHAR(20);
+BEGIN
+    -- Whitelist validation: Strictly allow 'Employee' and 'IT Staff', fallback safely to 'Employee'
+    IF NEW.raw_user_meta_data->>'role' IN ('Employee', 'IT Staff') THEN
+        v_role := NEW.raw_user_meta_data->>'role';
+    ELSE
+        v_role := 'Employee';
+    END IF;
+
+    INSERT INTO public.users (id, full_name, email, role)
+    VALUES (
+        NEW.id,
+        COALESCE(NULLIF(trim(NEW.raw_user_meta_data->>'full_name'), ''), split_part(NEW.email, '@', 1)),
+        NEW.email,
+        v_role
+    )
+    ON CONFLICT (id) DO UPDATE SET
+        email = EXCLUDED.email,
+        full_name = COALESCE(EXCLUDED.full_name, public.users.full_name),
+        role = EXCLUDED.role;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT OR UPDATE ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_auth_user();
+
+-- 4.2 Trigger Function: Prevent User Role Mutation (Immutable Role Guard)
+-- Guarantees that neither Employee nor IT Staff can change their role via client updates
+CREATE OR REPLACE FUNCTION public.trg_prevent_user_role_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (auth.role() = 'authenticated' AND OLD.role IS DISTINCT FROM NEW.role) THEN
+        RAISE EXCEPTION 'Security Policy Violated: user role is immutable and cannot be modified by user.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+DROP TRIGGER IF EXISTS trg_users_immutable_role ON public.users;
+CREATE TRIGGER trg_users_immutable_role
+BEFORE UPDATE ON public.users
+FOR EACH ROW
+EXECUTE FUNCTION public.trg_prevent_user_role_change();
+
+-- 4.3 Trigger Function: Enforce Ticket Lifecycle Invariants & Guards
 CREATE OR REPLACE FUNCTION public.trg_enforce_ticket_invariants()
 RETURNS TRIGGER AS $$
+DECLARE
+    v_user_role VARCHAR(20);
 BEGIN
     -- INVARIANT 5: Terminal Closed State Invariant
     -- Once a ticket reaches 'Closed', NO FURTHER FIELD MUTATIONS ARE PERMITTED.
     IF (OLD.status = 'Closed') THEN
         RAISE EXCEPTION 'Terminal Closed State Invariant Violated: closed tickets are permanently locked and immutable.';
+    END IF;
+
+    -- Fetch acting user role if executed via client session
+    SELECT role INTO v_user_role FROM public.users WHERE id = auth.uid();
+
+    -- Role Guard: Prevent Employee from tampering with core ticket attributes during Verification
+    IF (v_user_role = 'Employee') THEN
+        IF (OLD.status != 'Verification') THEN
+            RAISE EXCEPTION 'Security Policy Violated: Employee can only update tickets during Verification stage.';
+        END IF;
+        IF (NEW.status NOT IN ('Closed', 'In Progress')) THEN
+            RAISE EXCEPTION 'Security Policy Violated: Invalid target status for verification transition.';
+        END IF;
+        IF (NEW.reporter_id != OLD.reporter_id OR
+            NEW.assignee_id IS DISTINCT FROM OLD.assignee_id OR
+            NEW.priority IS DISTINCT FROM OLD.priority OR
+            NEW.summary != OLD.summary OR
+            NEW.description != OLD.description OR
+            NEW.resolution_notes IS DISTINCT FROM OLD.resolution_notes) THEN
+            RAISE EXCEPTION 'Security Policy Violated: Employee cannot modify core ticket attributes during verification.';
+        END IF;
     END IF;
 
     -- INVARIANT 1: Clear Ownership Invariant
@@ -142,6 +211,13 @@ BEGIN
     -- Transitioning to 'Resolution' requires non-empty resolution_notes.
     IF (NEW.status = 'Resolution' AND (NEW.resolution_notes IS NULL OR trim(NEW.resolution_notes) = '')) THEN
         RAISE EXCEPTION 'Mandatory Resolution Notes Guard Violated: resolution_notes cannot be empty on Resolution.';
+    END IF;
+
+    -- TBD #6 Option B Guard: Resolution Submission restricted strictly to active Assignee
+    IF (OLD.status != 'Resolution' AND NEW.status = 'Resolution') THEN
+        IF (OLD.assignee_id IS NULL OR OLD.assignee_id != auth.uid()) THEN
+            RAISE EXCEPTION 'Security Policy Violated: Resolution submission is restricted strictly to active Assignee (Explicit Take Over required).';
+        END IF;
     END IF;
 
     -- INVARIANT 4: Mandatory Dispute Feedback Guard
@@ -162,7 +238,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 DROP TRIGGER IF EXISTS trg_tickets_invariants_guard ON public.tickets;
 CREATE TRIGGER trg_tickets_invariants_guard
@@ -170,13 +246,13 @@ BEFORE UPDATE ON public.tickets
 FOR EACH ROW
 EXECUTE FUNCTION public.trg_enforce_ticket_invariants();
 
--- Function 4.2: Enforce Append-Only History (Audit Log Integrity)
+-- 4.4 Trigger Function: Enforce Append-Only History (Audit Log Integrity)
 CREATE OR REPLACE FUNCTION public.trg_enforce_history_append_only()
 RETURNS TRIGGER AS $$
 BEGIN
     RAISE EXCEPTION 'Audit Log Integrity Violated: ticket_history is strictly append-only and cannot be updated or deleted.';
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 DROP TRIGGER IF EXISTS trg_ticket_history_no_update_delete ON public.ticket_history;
 CREATE TRIGGER trg_ticket_history_no_update_delete
