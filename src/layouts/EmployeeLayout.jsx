@@ -1,99 +1,239 @@
-import React from 'react'
-import { Outlet, useNavigate, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Outlet, useNavigate, NavLink } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { LifeBuoy, LogOut, Ticket, PlusCircle } from 'lucide-react'
+import { useNotifications } from '@/hooks/useNotifications'
+import { NotificationCenterDrawer } from '@/components/domain'
+import {
+  LayoutDashboard,
+  TicketCheck,
+  Bell,
+  HelpCircle,
+  LogOut,
+  AlertCircle,
+} from 'lucide-react'
 
+// ---------------------------------------------------------------------------
+// Employee Sidebar Nav Item
+// ---------------------------------------------------------------------------
+function EmployeeSidebarLink({ to, icon: Icon, label, end = false }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        [
+          'flex items-center gap-space-sm px-space-md py-space-sm rounded transition-colors font-body-md text-body-md',
+          isActive
+            ? 'bg-secondary-container text-on-surface font-title-md'
+            : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface',
+        ].join(' ')
+      }
+    >
+      <Icon size={20} />
+      <span>{label}</span>
+    </NavLink>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// EmployeeLayout
+// ---------------------------------------------------------------------------
 export function EmployeeLayout() {
   const { profile, signOut } = useAuth()
   const navigate = useNavigate()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const {
+    notifications,
+    unreadCount,
+    markRead,
+    markAllRead,
+  } = useNotifications()
 
   const handleSignOut = async () => {
     await signOut()
     navigate('/login', { replace: true })
   }
 
+  // Derive initials for avatar fallback
+  const initials = profile?.full_name
+    ? profile.full_name
+        .split(' ')
+        .slice(0, 2)
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+    : 'EU'
+
   return (
-    <div className="min-h-screen bg-surface flex flex-col text-on-surface">
-      {/* Employee Topbar */}
-      <header className="border-b border-outline-variant/60 bg-surface-container-lowest sticky top-0 z-30 shadow-2xs">
-        <div className="max-w-7xl mx-auto px-space-md md:px-space-xl h-16 flex items-center justify-between">
-          {/* Logo & Platform Name */}
-          <div className="flex items-center gap-space-sm">
-            <div className="w-9 h-9 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-              <LifeBuoy className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-title-md tracking-tight text-on-surface">
-                  IT Service Desk
-                </span>
-                <Badge variant="secondary" className="font-mono text-label-sm">
-                  Employee Portal
-                </Badge>
-              </div>
-              <p className="text-[11px] text-on-surface-variant hidden sm:block">
-                Internal Support &amp; Incident Verification
-              </p>
-            </div>
+    <div className="min-h-screen bg-surface text-on-surface antialiased">
+      {/* Notification Center Drawer */}
+      <NotificationCenterDrawer
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        notifications={notifications}
+        unreadCount={unreadCount}
+        onMarkAllRead={markAllRead}
+        onDismiss={markRead}
+        onNavigate={(ticketId) => {
+          setIsDrawerOpen(false)
+          navigate(`/employee/tickets/${ticketId}`)
+        }}
+        role="Employee"
+      />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* TOP HEADER BAR — fixed, h-16                                        */}
+      {/* ------------------------------------------------------------------ */}
+      <header className="fixed top-0 left-0 w-full h-16 bg-surface-container-lowest z-50 flex items-center justify-between px-gutter shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/50">
+
+        {/* Left: Logo + Portal Name */}
+        <div className="flex items-center gap-space-md">
+          {/* Logo Mark — shield/service icon in brand navy */}
+          <div className="flex items-center justify-center w-8 h-8 rounded bg-primary-container">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="w-5 h-5 text-inverse-on-surface"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V7L12 2z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
           </div>
 
-          {/* User Profile & Actions */}
-          <div className="flex items-center gap-space-md">
-            <div className="hidden sm:flex flex-col text-right">
-              <span className="text-body-sm font-medium text-on-surface">
-                {profile?.full_name || 'Employee User'}
-              </span>
-              <span className="text-label-sm text-on-surface-variant font-mono">
-                {profile?.email}
-              </span>
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
+          <div className="flex flex-col justify-center">
+            <span className="font-title-md text-title-md text-on-surface tracking-tight leading-none">
+              IT Service Console
+            </span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-0.5">
+              Employee Portal
+            </span>
           </div>
         </div>
 
-        {/* Secondary Navigation Bar */}
-        <div className="border-t border-outline-variant/40 bg-surface-container-low/40">
-          <div className="max-w-7xl mx-auto px-space-md md:px-space-xl flex items-center gap-space-xs h-11">
-            <Link
-              to="/employee"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-body-sm font-medium text-secondary bg-surface border border-outline-variant/50 shadow-2xs"
-            >
-              <Ticket className="w-4 h-4" />
-              <span>My Incident Tickets</span>
-            </Link>
-            <div
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-body-sm text-on-surface-variant/60 cursor-not-allowed select-none"
-              title="Ticket creation feature will be available in Stage 5"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Report Incident (Stage 5)</span>
+        {/* Right: Identity badge + Notification + User Avatar */}
+        <div className="flex items-center gap-space-md">
+          {/* Identity pill (hidden on small screens) */}
+          <div className="hidden md:flex items-center gap-space-xs px-space-md py-1 bg-surface-container-low rounded-lg">
+            <span className="font-label-sm text-label-sm text-on-surface">
+              Logged as:{' '}
+              <strong className="font-title-md text-title-md text-on-surface">
+                Employee
+              </strong>{' '}
+              <span className="text-on-surface-variant">
+                ({profile?.full_name || '—'})
+              </span>
+            </span>
+          </div>
+
+          {/* Notification Bell */}
+          <button
+            id="employee-notification-trigger"
+            type="button"
+            onClick={() => setIsDrawerOpen(true)}
+            aria-label="Open Notification Center"
+            className="relative p-space-sm rounded-lg hover:bg-surface-container hover:text-on-surface text-on-surface-variant transition-colors flex items-center justify-center"
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-error font-label-sm text-label-sm text-on-error leading-none">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+
+          {/* User Avatar + Name */}
+          <div className="flex items-center gap-space-sm pl-space-xs">
+            <div className="w-8 h-8 rounded-full bg-primary-container text-inverse-on-surface flex items-center justify-center font-title-md text-title-md flex-shrink-0 select-none">
+              {initials}
+            </div>
+            <div className="hidden xl:flex flex-col text-left">
+              <span className="font-title-md text-title-md text-on-surface leading-tight">
+                {profile?.full_name || 'Employee User'}
+              </span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant leading-tight">
+                {profile?.email || '—'}
+              </span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content Shell */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-space-md md:p-space-xl">
-        <Outlet />
-      </main>
+      {/* ------------------------------------------------------------------ */}
+      {/* LEFT SIDEBAR — fixed, w-60, top-16                                  */}
+      {/* ------------------------------------------------------------------ */}
+      <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 bg-surface-container-lowest z-40 flex flex-col justify-between py-space-md px-space-sm shadow-[1px_0_8px_rgba(0,0,0,0.02)] border-r border-outline-variant/40">
 
-      {/* Minimal Footer */}
-      <footer className="border-t border-outline-variant/50 bg-surface-container-lowest py-3 text-center text-label-sm text-on-surface-variant">
-        <span>Internal IT Service Platform V1 — Employee Session Active</span>
-      </footer>
+        {/* Top section: CTA + Main Nav */}
+        <div className="space-y-space-md">
+
+          {/* Primary CTA: Report Problem */}
+          <div className="px-space-xs">
+            <NavLink
+              to="/employee/report"
+              id="employee-report-problem-cta"
+              className="w-full flex items-center justify-center gap-space-sm bg-secondary hover:bg-secondary/90 text-on-secondary px-space-md py-space-sm rounded-lg transition-colors font-title-md text-title-md shadow-sm"
+            >
+              <AlertCircle size={18} />
+              <span>Report Problem</span>
+            </NavLink>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex flex-col gap-0.5" aria-label="Employee Navigation">
+            <EmployeeSidebarLink
+              to="/employee"
+              end
+              icon={LayoutDashboard}
+              label="Dashboard"
+            />
+            <EmployeeSidebarLink
+              to="/employee/tickets"
+              icon={TicketCheck}
+              label="My Tickets"
+            />
+            <EmployeeSidebarLink
+              to="/employee/notifications"
+              icon={Bell}
+              label="Notification Center"
+            />
+          </nav>
+        </div>
+
+        {/* Bottom section: Help + Sign Out */}
+        <div className="border-t border-surface-container pt-space-sm space-y-0.5">
+          <EmployeeSidebarLink
+            to="/employee/help"
+            icon={HelpCircle}
+            label="Help & FAQ"
+          />
+          <button
+            type="button"
+            onClick={handleSignOut}
+            id="employee-sign-out-btn"
+            className="w-full flex items-center gap-space-sm px-space-md py-space-sm rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-md text-body-md text-left"
+          >
+            <LogOut size={20} />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* MAIN CONTENT AREA — offset pl-60, pt-16                             */}
+      {/* ------------------------------------------------------------------ */}
+      <div className="pl-60">
+        <main className="w-full min-h-[calc(100vh-4rem)] pt-16 bg-surface p-space-md lg:p-margin">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }
 
 export default EmployeeLayout
+
