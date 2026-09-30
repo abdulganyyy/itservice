@@ -7,8 +7,8 @@ export function ProtectedRoute({ allowedRoles = [] }) {
   const { user, profile, loading } = useAuth()
   const location = useLocation()
 
-  // Prevent premature redirect or UI flicker while authentication is being verified
-  if (loading) {
+  // Prevent premature redirect or UI flicker while authentication/profile is being verified
+  if (loading || (user && !profile)) {
     return (
       <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-space-md">
         <div className="flex flex-col items-center gap-space-sm bg-surface-container-lowest border border-outline-variant/60 p-space-lg rounded-xl shadow-xs">

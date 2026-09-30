@@ -32,17 +32,15 @@ function enrichTicket(ticket, usersMap) {
  */
 export async function fetchUsers(role = null) {
   if (isSupabaseConfigured()) {
-    try {
-      let query = supabase.from('users').select('id, full_name, email, role, created_at')
-      if (role) {
-        query = query.eq('role', role)
-      }
-      const { data, error } = await query.order('full_name', { ascending: true })
-      if (!error && data) return data
-      console.warn('[ticketService] fetchUsers Supabase error, falling back to mock:', error?.message)
-    } catch (err) {
-      console.warn('[ticketService] fetchUsers network error, fallback to mock:', err)
+    let query = supabase.from('users').select('id, full_name, email, role, created_at')
+    if (role) {
+      query = query.eq('role', role)
     }
+    const { data, error } = await query.order('full_name', { ascending: true })
+    if (error) {
+      throw new Error(error.message || 'Failed to fetch users from database')
+    }
+    return data || []
   }
 
   const users = mockStore.getUsers()
@@ -54,73 +52,72 @@ export async function fetchUsers(role = null) {
  * Fetch tickets list with role-scoping and filters
  */
 export async function fetchTickets({ role, userId, status, assigneeId, search } = {}) {
-  const users = await fetchUsers()
-  const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
-
   if (isSupabaseConfigured()) {
-    try {
-      let query = supabase
-        .from('tickets')
-        .select(`
-          id,
-          reporter_id,
-          assignee_id,
-          summary,
-          description,
-          priority,
-          status,
-          impact_metadata,
-          resolution_notes,
-          verification_feedback,
-          verification_started_at,
-          created_at,
-          closed_at,
-          reporter:reporter_id(id, full_name, email, role),
-          assignee:assignee_id(id, full_name, email, role)
-        `)
-        .order('created_at', { ascending: false })
+    const users = await fetchUsers()
+    const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
 
-      // Employee scoping (ACT-12 / RLS)
-      if (role === 'Employee' && userId) {
-        query = query.eq('reporter_id', userId)
-      }
+    let query = supabase
+      .from('tickets')
+      .select(`
+        id,
+        reporter_id,
+        assignee_id,
+        summary,
+        description,
+        priority,
+        status,
+        impact_metadata,
+        resolution_notes,
+        verification_feedback,
+        verification_started_at,
+        created_at,
+        closed_at,
+        reporter:reporter_id(id, full_name, email, role),
+        assignee:assignee_id(id, full_name, email, role)
+      `)
+      .order('created_at', { ascending: false })
 
-      // Filter by status if provided
-      if (status) {
-        if (Array.isArray(status)) {
-          query = query.in('status', status)
-        } else if (status !== 'all') {
-          query = query.eq('status', status)
-        }
-      }
-
-      // Filter by assignee if provided
-      if (assigneeId) {
-        query = query.eq('assignee_id', assigneeId)
-      }
-
-      const { data, error } = await query
-
-      if (!error && data) {
-        let results = data.map((t) => enrichTicket(t, usersMap))
-        if (search && search.trim()) {
-          const q = search.toLowerCase()
-          results = results.filter(
-            (t) =>
-              t.summary?.toLowerCase().includes(q) ||
-              t.id?.toLowerCase().includes(q) ||
-              t.description?.toLowerCase().includes(q)
-          )
-        }
-        return results
-      }
-      console.warn('[ticketService] fetchTickets Supabase error, falling back to mock:', error?.message)
-    } catch (err) {
-      console.warn('[ticketService] fetchTickets network error, fallback to mock:', err)
+    // Employee scoping (ACT-12 / RLS)
+    if (role === 'Employee' && userId) {
+      query = query.eq('reporter_id', userId)
     }
+
+    // Filter by status if provided
+    if (status) {
+      if (Array.isArray(status)) {
+        query = query.in('status', status)
+      } else if (status !== 'all') {
+        query = query.eq('status', status)
+      }
+    }
+
+    // Filter by assignee if provided
+    if (assigneeId) {
+      query = query.eq('assignee_id', assigneeId)
+    }
+
+    const { data, error } = await query
+
+    if (error) {
+      throw new Error(error.message || 'Failed to fetch tickets from database')
+    }
+
+    let results = (data || []).map((t) => enrichTicket(t, usersMap))
+    if (search && search.trim()) {
+      const q = search.toLowerCase()
+      results = results.filter(
+        (t) =>
+          t.summary?.toLowerCase().includes(q) ||
+          t.id?.toLowerCase().includes(q) ||
+          t.description?.toLowerCase().includes(q)
+      )
+    }
+    return results
   }
 
-  // Fallback to mock repository
+  // Fallback to mock repository for development/unconfigured mode
+  const users = await fetchUsers()
+  const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
   let tickets = mockStore.getTickets()
 
   if (role === 'Employee' && userId) {
@@ -158,42 +155,41 @@ export async function fetchTickets({ role, userId, status, assigneeId, search } 
  * Fetch a single ticket by ID with history logs
  */
 export async function fetchTicketById(ticketId) {
-  const users = await fetchUsers()
-  const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
-
   if (isSupabaseConfigured()) {
-    try {
-      const { data, error } = await supabase
-        .from('tickets')
-        .select(`
-          id,
-          reporter_id,
-          assignee_id,
-          summary,
-          description,
-          priority,
-          status,
-          impact_metadata,
-          resolution_notes,
-          verification_feedback,
-          verification_started_at,
-          created_at,
-          closed_at,
-          reporter:reporter_id(id, full_name, email, role),
-          assignee:assignee_id(id, full_name, email, role)
-        `)
-        .eq('id', ticketId)
-        .single()
+    const users = await fetchUsers()
+    const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
 
-      if (!error && data) {
-        return enrichTicket(data, usersMap)
-      }
-      console.warn('[ticketService] fetchTicketById error, falling back:', error?.message)
-    } catch (err) {
-      console.warn('[ticketService] fetchTicketById network error:', err)
+    const { data, error } = await supabase
+      .from('tickets')
+      .select(`
+        id,
+        reporter_id,
+        assignee_id,
+        summary,
+        description,
+        priority,
+        status,
+        impact_metadata,
+        resolution_notes,
+        verification_feedback,
+        verification_started_at,
+        created_at,
+        closed_at,
+        reporter:reporter_id(id, full_name, email, role),
+        assignee:assignee_id(id, full_name, email, role)
+      `)
+      .eq('id', ticketId)
+      .maybeSingle()
+
+    if (error) {
+      throw new Error(error.message || `Failed to fetch ticket ${ticketId}`)
     }
+    if (!data) return null
+    return enrichTicket(data, usersMap)
   }
 
+  const users = await fetchUsers()
+  const usersMap = Object.fromEntries(users.map((u) => [u.id, u]))
   const tickets = mockStore.getTickets()
   const found = tickets.find((t) => t.id === ticketId)
   if (!found) return null

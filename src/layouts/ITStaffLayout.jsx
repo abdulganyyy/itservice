@@ -17,16 +17,19 @@ import {
   Zap,
   LogOut,
   Volume2,
+  Menu,
+  X,
 } from 'lucide-react'
 
 // ---------------------------------------------------------------------------
 // IT Staff Sidebar Nav Item
 // ---------------------------------------------------------------------------
-function StaffSidebarLink({ to, icon: Icon, label, badge = null, end = false }) {
+function StaffSidebarLink({ to, icon: Icon, label, badge = null, end = false, onClick }) {
   return (
     <NavLink
       to={to}
       end={end}
+      onClick={onClick}
       className={({ isActive }) =>
         [
           'flex items-center justify-between px-space-sm py-space-xs rounded transition-colors',
@@ -57,6 +60,7 @@ export function ITStaffLayout() {
   const navigate = useNavigate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isQuickTicketOpen, setIsQuickTicketOpen] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const audioPlayerRef = useRef(null)
 
   const {
@@ -127,10 +131,20 @@ export function ITStaffLayout() {
       {/* ------------------------------------------------------------------ */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-primary-container z-50 px-gutter flex items-center justify-between border-b border-primary-container/40">
 
-        {/* Left: Logo + Console Title + Identity Badge */}
-        <div className="flex items-center gap-space-md">
+        {/* Left: Mobile Toggle + Logo + Console Title + Identity Badge */}
+        <div className="flex items-center gap-space-sm sm:gap-space-md">
+          {/* Mobile hamburger menu button */}
+          <button
+            type="button"
+            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+            aria-label="Toggle operations navigation menu"
+            className="md:hidden p-1.5 rounded-lg text-inverse-on-surface hover:bg-white/10 transition-colors flex items-center justify-center"
+          >
+            {isMobileNavOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+
           {/* Logo Mark */}
-          <div className="flex items-center justify-center w-8 h-8 rounded bg-inverse-surface/60">
+          <div className="flex items-center justify-center w-8 h-8 rounded bg-inverse-surface/60 shrink-0">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -170,7 +184,7 @@ export function ITStaffLayout() {
         </div>
 
         {/* Right: Quick Ticket + Audio Status + Notification + Profile */}
-        <div className="flex items-center gap-space-md">
+        <div className="flex items-center gap-space-sm sm:gap-space-md">
 
           {/* Quick Ticket CTA */}
           <button
@@ -178,10 +192,10 @@ export function ITStaffLayout() {
             type="button"
             onClick={() => setIsQuickTicketOpen(true)}
             aria-label="Open Quick Ticket modal"
-            className="flex items-center gap-space-xs bg-secondary-container hover:bg-secondary text-on-secondary px-space-md py-space-xs rounded font-title-md text-title-md shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-colors"
+            className="flex items-center gap-space-xs bg-secondary-container hover:bg-secondary text-on-secondary px-space-sm sm:px-space-md py-space-xs rounded font-title-md text-title-md shadow-[0_1px_4px_rgba(0,0,0,0.15)] transition-colors"
           >
             <Zap size={18} />
-            <span>+ Quick Ticket</span>
+            <span className="hidden xs:inline sm:inline">+ Quick Ticket</span>
           </button>
 
           {/* Audio Telemetry Status Indicator */}
@@ -212,7 +226,7 @@ export function ITStaffLayout() {
           </button>
 
           {/* Vertical divider */}
-          <div className="h-6 w-px bg-outline/20" />
+          <div className="h-6 w-px bg-outline/20 hidden sm:block" />
 
           {/* User Avatar */}
           <div className="flex items-center gap-space-sm">
@@ -231,10 +245,18 @@ export function ITStaffLayout() {
         </div>
       </header>
 
+      {/* Mobile Sidebar Backdrop */}
+      {isMobileNavOpen && (
+        <div
+          className="fixed inset-0 top-16 bg-slate-900/50 backdrop-blur-xs z-30 md:hidden"
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+      )}
+
       {/* ------------------------------------------------------------------ */}
-      {/* LEFT SIDEBAR — fixed, w-60, top-16                                  */}
+      {/* LEFT SIDEBAR — responsive slide-out on mobile, fixed on desktop     */}
       {/* ------------------------------------------------------------------ */}
-      <aside className="fixed left-0 top-16 bottom-0 w-60 bg-surface-container-low border-r border-outline-variant/50 z-40 flex flex-col justify-between overflow-y-auto">
+      <aside className={`fixed left-0 top-16 bottom-0 w-60 bg-surface-container-low border-r border-outline-variant/50 z-40 flex flex-col justify-between overflow-y-auto transition-transform duration-200 ease-in-out ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
 
         {/* Top section: Quick Ticket CTA + Queue Navigation */}
         <div className="p-space-sm flex flex-col gap-space-sm">
@@ -243,7 +265,10 @@ export function ITStaffLayout() {
           <button
             id="staff-sidebar-quick-ticket-btn"
             type="button"
-            onClick={() => setIsQuickTicketOpen(true)}
+            onClick={() => {
+              setIsMobileNavOpen(false)
+              setIsQuickTicketOpen(true)
+            }}
             className="w-full flex items-center justify-center gap-space-xs bg-secondary text-on-secondary py-space-xs rounded font-title-md text-title-md hover:bg-secondary/90 transition-colors shadow-sm"
           >
             <Zap size={18} />
@@ -265,29 +290,34 @@ export function ITStaffLayout() {
               icon={ListFilter}
               label="Operational Queue"
               badge={metrics.awaitingAssessment > 0 ? metrics.awaitingAssessment : null}
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <StaffSidebarLink
               to="/staff/assessment"
               icon={ClipboardList}
               label="Initial Assessment"
               badge={metrics.awaitingAssessment > 0 ? metrics.awaitingAssessment : null}
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <StaffSidebarLink
               to="/staff/assigned"
               icon={UserCheck}
               label="My Assigned Tickets"
               badge={metrics.myAssigned > 0 ? metrics.myAssigned : null}
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <StaffSidebarLink
               to="/staff/history"
               icon={Archive}
               label="Incident Archive / History"
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <StaffSidebarLink
               to="/staff/notifications"
               icon={Bell}
               label="Notification Log"
               badge={unreadCount > 0 ? unreadCount : null}
+              onClick={() => setIsMobileNavOpen(false)}
             />
           </nav>
         </div>
@@ -359,9 +389,9 @@ export function ITStaffLayout() {
       </aside>
 
       {/* ------------------------------------------------------------------ */}
-      {/* MAIN CONTENT AREA — offset pl-60, pt-16                             */}
+      {/* MAIN CONTENT AREA — responsive offset: pl-0 md:pl-60                 */}
       {/* ------------------------------------------------------------------ */}
-      <div className="pl-60">
+      <div className="pl-0 md:pl-60 w-full">
         <main className="w-full min-h-screen pt-16 bg-surface">
           <Outlet />
         </main>

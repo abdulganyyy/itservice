@@ -55,7 +55,7 @@ export default function StaffMyAssignedPage() {
   }, [tickets, stageFilter, searchQuery])
 
   return (
-    <div className="flex flex-col w-full space-y-6">
+    <div className="flex flex-col w-full space-y-6 p-6">
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm mt-14">
         <div className="space-y-1">

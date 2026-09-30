@@ -6,18 +6,26 @@ import { mockStore } from '@/services/mockDataStore'
  * useRealtime — Subscribes to Supabase postgres_changes for table events.
  * Falls back to mockStore subscription if Supabase live connectivity is not active.
  */
-export function useRealtime({ table, event = '*', filter = null, onPayload }) {
+export function useRealtime({ table, events = null, event = '*', filter = null, onPayload }) {
   useEffect(() => {
     if (!onPayload) return
 
     if (isSupabaseConfigured()) {
-      const channelName = `realtime:${table}:${filter || 'all'}`
-      const channel = supabase
-        .channel(channelName)
-        .on(
+      // Use unique channel identifier to prevent channel collision between concurrent components (e.g. Layout + Page)
+      const uniqueId = Math.random().toString(36).slice(2, 9)
+      const channelName = `realtime:${table}:${filter || 'all'}:${uniqueId}`
+      const channel = supabase.channel(channelName)
+
+      // V1 canonical events: tickets table strictly subscribes to INSERT and UPDATE (no DELETE)
+      const targetEvents =
+        events ||
+        (table === 'tickets' && event === '*' ? ['INSERT', 'UPDATE'] : [event])
+
+      targetEvents.forEach((evt) => {
+        channel.on(
           'postgres_changes',
           {
-            event,
+            event: evt,
             schema: 'public',
             table,
             ...(filter ? { filter } : {}),
@@ -26,11 +34,9 @@ export function useRealtime({ table, event = '*', filter = null, onPayload }) {
             onPayload(payload)
           }
         )
-        .subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
-            // console.log(`[useRealtime] Subscribed to ${table}`)
-          }
-        })
+      })
+
+      channel.subscribe()
 
       return () => {
         supabase.removeChannel(channel)
@@ -47,5 +53,5 @@ export function useRealtime({ table, event = '*', filter = null, onPayload }) {
     return () => {
       unsubscribe()
     }
-  }, [table, event, filter, onPayload])
+  }, [table, event, events, filter, onPayload])
 }

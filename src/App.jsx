@@ -35,7 +35,7 @@ import StaffNotificationsPage from '@/pages/staff/StaffNotificationsPage'
 function RootRedirect() {
   const { user, profile, loading } = useAuth()
 
-  if (loading) {
+  if (loading || (user && !profile)) {
     return (
       <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-space-md">
         <div className="flex flex-col items-center gap-space-sm bg-surface-container-lowest border border-outline-variant/60 p-space-lg rounded-xl">

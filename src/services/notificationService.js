@@ -48,47 +48,44 @@ export async function fetchNotifications(userId) {
   if (!userId) return []
 
   if (isSupabaseConfigured()) {
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select(`
-          id,
-          target_user_id,
-          source_ticket_id,
-          event_type,
-          visual_badge_active,
-          audio_priority_context,
-          persistent_unread_state,
-          created_at,
-          ticket:source_ticket_id(id, summary, priority, status)
-        `)
-        .eq('target_user_id', userId)
-        .order('created_at', { ascending: false })
+    const { data, error } = await supabase
+      .from('notifications')
+      .select(`
+        id,
+        target_user_id,
+        source_ticket_id,
+        event_type,
+        visual_badge_active,
+        audio_priority_context,
+        persistent_unread_state,
+        created_at,
+        ticket:source_ticket_id(id, summary, priority, status)
+      `)
+      .eq('target_user_id', userId)
+      .order('created_at', { ascending: false })
 
-      if (!error && data) {
-        return data.map((n) => ({
-          id: n.id,
-          ticketId: n.ticket?.id || n.source_ticket_id,
-          title: n.ticket?.summary || 'IT Incident Update',
-          eventLabel: getEventLabel(n.event_type),
-          stage: n.ticket?.status || 'In Progress',
-          priority: n.audio_priority_context || n.ticket?.priority || null,
-          message: `${getEventLabel(n.event_type)} on incident #${(n.ticket?.id || n.source_ticket_id).slice(0, 8)}`,
-          relativeTime: formatRelativeTime(n.created_at),
-          timestamp: n.created_at,
-          isRead: n.persistent_unread_state === 'read',
-          requiresAction:
-            n.event_type === 'EVENT_RESOLUTION_SUBMITTED' ||
-            n.event_type === 'EVENT_RESOLUTION_DISPUTED',
-        }))
-      }
-      console.warn('[notificationService] fetchNotifications error, fallback to mock:', error?.message)
-    } catch (err) {
-      console.warn('[notificationService] fetchNotifications network error:', err)
+    if (error) {
+      throw new Error(error.message || 'Failed to fetch notifications from database')
     }
+
+    return (data || []).map((n) => ({
+      id: n.id,
+      ticketId: n.ticket?.id || n.source_ticket_id,
+      title: n.ticket?.summary || 'IT Incident Update',
+      eventLabel: getEventLabel(n.event_type),
+      stage: n.ticket?.status || 'In Progress',
+      priority: n.audio_priority_context || n.ticket?.priority || null,
+      message: `${getEventLabel(n.event_type)} on incident #${(n.ticket?.id || n.source_ticket_id).slice(0, 8)}`,
+      relativeTime: formatRelativeTime(n.created_at),
+      timestamp: n.created_at,
+      isRead: n.persistent_unread_state === 'read',
+      requiresAction:
+        n.event_type === 'EVENT_RESOLUTION_SUBMITTED' ||
+        n.event_type === 'EVENT_RESOLUTION_DISPUTED',
+    }))
   }
 
-  // Mock Store Fallback
+  // Mock Store Fallback for development/unconfigured mode
   const notifs = mockStore.getNotifications()
   const userNotifs = notifs.filter((n) => n.target_user_id === userId)
   const tickets = mockStore.getTickets()

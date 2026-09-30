@@ -99,7 +99,7 @@ export default function StaffDashboard() {
       <TelemetryFeedBar items={telemetryItems} />
 
       {/* Metric Triage Strip (4 Bento Cards) */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
         <MetricTriageCard
           title="Unassessed Queue"
           value={String(metrics.awaitingAssessment).padStart(2, '0')}
@@ -135,9 +135,9 @@ export default function StaffDashboard() {
       </section>
 
       {/* Main Operational Queue Data Grid */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col m-6">
         {/* Table Toolbar */}
-        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2">
           <div>
             <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <span>Centralized Operational Incident Queue</span>

@@ -74,9 +74,9 @@ export default function DisputeResolutionModal({
       aria-labelledby="dispute-modal-title"
     >
       {/* Modal Dialog Box */}
-      <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
+      <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-slate-200 max-h-[92vh]">
         {/* Top Warning Accent Bar */}
-        <div className="h-1.5 w-full bg-red-600" />
+        <div className="h-1.5 w-full bg-red-600 shrink-0" />
 
         {/* Modal Header */}
         <div className="px-5 sm:px-6 pt-5 pb-4 bg-red-50/50 flex items-start justify-between gap-4 border-b border-red-100">
@@ -110,7 +110,7 @@ export default function DisputeResolutionModal({
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleFormSubmit} className="p-5 sm:p-6 flex flex-col gap-4">
+        <form onSubmit={handleFormSubmit} className="p-5 sm:p-6 flex flex-col gap-4 overflow-y-auto">
           <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
             Please provide specific technical details regarding what failed during your verification test. This information is immediately dispatched to <strong className="text-slate-900 font-semibold">{technicianName}</strong> to resume incident handling without delay.
           </div>

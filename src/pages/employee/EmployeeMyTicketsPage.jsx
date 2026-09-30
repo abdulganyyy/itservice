@@ -71,7 +71,7 @@ export default function EmployeeMyTicketsPage() {
 
 
   return (
-    <div className="flex flex-col w-full space-y-6">
+    <div className="flex flex-col w-full space-y-6 pt-16">
       {/* Sub-Header / Page Title & Actions Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
         <div className="space-y-1">

@@ -10,16 +10,19 @@ import {
   HelpCircle,
   LogOut,
   AlertCircle,
+  Menu,
+  X,
 } from 'lucide-react'
 
 // ---------------------------------------------------------------------------
 // Employee Sidebar Nav Item
 // ---------------------------------------------------------------------------
-function EmployeeSidebarLink({ to, icon: Icon, label, end = false }) {
+function EmployeeSidebarLink({ to, icon: Icon, label, end = false, onClick }) {
   return (
     <NavLink
       to={to}
       end={end}
+      onClick={onClick}
       className={({ isActive }) =>
         [
           'flex items-center gap-space-sm px-space-md py-space-sm rounded transition-colors font-body-md text-body-md',
@@ -42,6 +45,7 @@ export function EmployeeLayout() {
   const { profile, signOut } = useAuth()
   const navigate = useNavigate()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   const {
     notifications,
@@ -66,7 +70,7 @@ export function EmployeeLayout() {
     : 'EU'
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface antialiased">
+    <div className="min-h-screen bg-surface text-on-surface antialiased overflow-x-hidden">
       {/* Notification Center Drawer */}
       <NotificationCenterDrawer
         open={isDrawerOpen}
@@ -87,10 +91,20 @@ export function EmployeeLayout() {
       {/* ------------------------------------------------------------------ */}
       <header className="fixed top-0 left-0 w-full h-16 bg-surface-container-lowest z-50 flex items-center justify-between px-gutter shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/50">
 
-        {/* Left: Logo + Portal Name */}
-        <div className="flex items-center gap-space-md">
+        {/* Left: Mobile Toggle + Logo + Portal Name */}
+        <div className="flex items-center gap-space-sm sm:gap-space-md">
+          {/* Mobile hamburger menu button */}
+          <button
+            type="button"
+            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+            aria-label="Toggle navigation menu"
+            className="md:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex items-center justify-center"
+          >
+            {isMobileNavOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+
           {/* Logo Mark — shield/service icon in brand navy */}
-          <div className="flex items-center justify-center w-8 h-8 rounded bg-primary-container">
+          <div className="flex items-center justify-center w-8 h-8 rounded bg-primary-container shrink-0">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -116,7 +130,7 @@ export function EmployeeLayout() {
         </div>
 
         {/* Right: Identity badge + Notification + User Avatar */}
-        <div className="flex items-center gap-space-md">
+        <div className="flex items-center gap-space-sm sm:gap-space-md">
           {/* Identity pill (hidden on small screens) */}
           <div className="hidden md:flex items-center gap-space-xs px-space-md py-1 bg-surface-container-low rounded-lg">
             <span className="font-label-sm text-label-sm text-on-surface">
@@ -163,10 +177,18 @@ export function EmployeeLayout() {
         </div>
       </header>
 
+      {/* Mobile Sidebar Backdrop */}
+      {isMobileNavOpen && (
+        <div
+          className="fixed inset-0 top-16 bg-slate-900/50 backdrop-blur-xs z-30 md:hidden"
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+      )}
+
       {/* ------------------------------------------------------------------ */}
-      {/* LEFT SIDEBAR — fixed, w-60, top-16                                  */}
+      {/* LEFT SIDEBAR — responsive slide-out on mobile, fixed on desktop     */}
       {/* ------------------------------------------------------------------ */}
-      <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 bg-surface-container-lowest z-40 flex flex-col justify-between py-space-md px-space-sm shadow-[1px_0_8px_rgba(0,0,0,0.02)] border-r border-outline-variant/40">
+      <aside className={`fixed left-0 top-16 h-[calc(100vh-4rem)] w-60 bg-surface-container-lowest z-40 flex flex-col justify-between py-space-md px-space-sm shadow-[1px_0_8px_rgba(0,0,0,0.02)] border-r border-outline-variant/40 transition-transform duration-200 ease-in-out ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
 
         {/* Top section: CTA + Main Nav */}
         <div className="space-y-space-md">
@@ -176,6 +198,7 @@ export function EmployeeLayout() {
             <NavLink
               to="/employee/report"
               id="employee-report-problem-cta"
+              onClick={() => setIsMobileNavOpen(false)}
               className="w-full flex items-center justify-center gap-space-sm bg-secondary hover:bg-secondary/90 text-on-secondary px-space-md py-space-sm rounded-lg transition-colors font-title-md text-title-md shadow-sm"
             >
               <AlertCircle size={18} />
@@ -190,16 +213,19 @@ export function EmployeeLayout() {
               end
               icon={LayoutDashboard}
               label="Dashboard"
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <EmployeeSidebarLink
               to="/employee/tickets"
               icon={TicketCheck}
               label="My Tickets"
+              onClick={() => setIsMobileNavOpen(false)}
             />
             <EmployeeSidebarLink
               to="/employee/notifications"
               icon={Bell}
               label="Notification Center"
+              onClick={() => setIsMobileNavOpen(false)}
             />
           </nav>
         </div>
@@ -210,6 +236,7 @@ export function EmployeeLayout() {
             to="/employee/help"
             icon={HelpCircle}
             label="Help & FAQ"
+            onClick={() => setIsMobileNavOpen(false)}
           />
           <button
             type="button"
@@ -224,9 +251,9 @@ export function EmployeeLayout() {
       </aside>
 
       {/* ------------------------------------------------------------------ */}
-      {/* MAIN CONTENT AREA — offset pl-60, pt-16                             */}
+      {/* MAIN CONTENT AREA — responsive offset: pl-0 md:pl-60                 */}
       {/* ------------------------------------------------------------------ */}
-      <div className="pl-60">
+      <div className="pl-0 md:pl-60 w-full">
         <main className="w-full min-h-[calc(100vh-4rem)] pt-16 bg-surface p-space-md lg:p-margin">
           <Outlet />
         </main>
