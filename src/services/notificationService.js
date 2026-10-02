@@ -1,6 +1,59 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient'
 import { mockStore } from './mockDataStore'
-import { fetchTicketById } from './ticketService'
+
+/**
+ * Centralized notification creation helper (Stage 6 / Step 3)
+ *
+ * @param {Object} params
+ * @param {string} params.targetUserId - Target recipient user UUID
+ * @param {string} params.sourceTicketId - Related ticket UUID
+ * @param {string} params.eventType - Canonical notification event code
+ * @param {string} [params.audioPriorityContext=null] - Sound/priority hint ('Critical'|'High'|'Medium'|'Low')
+ * @param {boolean} [params.visualBadgeActive=true] - Visual unread badge flag
+ * @returns {Promise<{ success: boolean, data?: any }>}
+ */
+export async function createNotification({
+  targetUserId,
+  sourceTicketId,
+  eventType,
+  audioPriorityContext = null,
+  visualBadgeActive = true,
+}) {
+  if (!targetUserId || !sourceTicketId || !eventType) {
+    throw new Error('Missing required notification parameters (targetUserId, sourceTicketId, eventType).')
+  }
+
+  const payload = {
+    target_user_id: targetUserId,
+    source_ticket_id: sourceTicketId,
+    event_type: eventType,
+    audio_priority_context: audioPriorityContext || null,
+    visual_badge_active: visualBadgeActive ?? true,
+    persistent_unread_state: 'unread',
+  }
+
+  if (isSupabaseConfigured()) {
+    const { data, error } = await supabase.from('notifications').insert([payload])
+    if (error) {
+      throw error
+    }
+    return { success: true, data }
+  }
+
+  // Mock Store Fallback
+  const id = `mock-n-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+  const created = {
+    ...payload,
+    id,
+    created_at: new Date().toISOString(),
+  }
+
+  const notifs = mockStore.getNotifications()
+  mockStore.saveNotifications([created, ...notifs])
+
+  return { success: true, data: created }
+}
+
 
 /**
  * Format relative time string

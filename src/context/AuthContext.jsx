@@ -8,10 +8,18 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [profileLoading, setProfileLoading] = useState(false)
   const [error, setError] = useState(null)
 
   // Fetch genuine profile row from public.users table based on user.id
   const fetchUserProfile = useCallback(async (userId) => {
+    if (!userId) {
+      setProfile(null)
+      setProfileLoading(false)
+      return null
+    }
+
+    setProfileLoading(true)
     try {
       const { data, error: profileErr } = await supabase
         .from('users')
@@ -31,6 +39,8 @@ export function AuthProvider({ children }) {
       console.error('[AuthContext] Unexpected error fetching profile:', err)
       setProfile(null)
       return null
+    } finally {
+      setProfileLoading(false)
     }
   }, [])
 
@@ -71,6 +81,7 @@ export function AuthProvider({ children }) {
           await fetchUserProfile(currentSession.user.id)
         } else {
           setProfile(null)
+          setProfileLoading(false)
         }
         setLoading(false)
       }
@@ -123,6 +134,7 @@ export function AuthProvider({ children }) {
       setUser(null)
       setSession(null)
       setProfile(null)
+      setProfileLoading(false)
     }
   }
 
@@ -131,6 +143,7 @@ export function AuthProvider({ children }) {
     session,
     profile,
     loading,
+    profileLoading,
     error,
     signIn,
     signOut,

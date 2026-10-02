@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient'
 import { mockStore } from './mockDataStore'
+import { createNotification } from './notificationService'
 
 /**
  * Format ticket helper to attach reporter/assignee object from users list if not populated
@@ -313,6 +314,21 @@ export async function createQuickTicket({
         },
       ])
 
+      // Push notification to reporter if created by IT Staff on their behalf
+      if (data?.reporter_id && data.reporter_id !== currentUserId) {
+        try {
+          await createNotification({
+            targetUserId: data.reporter_id,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_TICKET_CREATED',
+            audioPriorityContext: data.priority || 'Medium',
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch quick ticket notification:', notifErr)
+        }
+      }
+
       return data
     } catch (err) {
       console.error('[ticketService] createQuickTicket Supabase error:', err)
@@ -350,6 +366,20 @@ export async function createQuickTicket({
     ...history,
   ])
 
+  if (created.reporter_id && created.reporter_id !== currentUserId) {
+    try {
+      await createNotification({
+        targetUserId: created.reporter_id,
+        sourceTicketId: created.id,
+        eventType: 'EVENT_TICKET_CREATED',
+        audioPriorityContext: created.priority || 'Medium',
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch quick ticket notification:', notifErr)
+    }
+  }
+
   return created
 }
 
@@ -386,6 +416,21 @@ export async function assessTicket({ ticketId, priority, impactMetadata = null, 
         },
       ])
 
+      // Push notification to reporter
+      if (data?.reporter_id) {
+        try {
+          await createNotification({
+            targetUserId: data.reporter_id,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_PRIORITY_SET',
+            audioPriorityContext: data.priority || priority,
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch priority assessment notification:', notifErr)
+        }
+      }
+
       return data
     } catch (err) {
       console.error('[ticketService] assessTicket error:', err)
@@ -415,7 +460,22 @@ export async function assessTicket({ ticketId, priority, impactMetadata = null, 
     ...history,
   ])
 
-  return updated.find((t) => t.id === ticketId)
+  const result = updated.find((t) => t.id === ticketId)
+  if (result?.reporter_id) {
+    try {
+      await createNotification({
+        targetUserId: result.reporter_id,
+        sourceTicketId: result.id,
+        eventType: 'EVENT_PRIORITY_SET',
+        audioPriorityContext: result.priority || priority,
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch priority assessment notification:', notifErr)
+    }
+  }
+
+  return result
 }
 
 /**
@@ -451,6 +511,21 @@ export async function assignTicket({ ticketId, assigneeId, actorId, actorName, a
         },
       ])
 
+      // Push notification to reporter
+      if (data?.reporter_id) {
+        try {
+          await createNotification({
+            targetUserId: data.reporter_id,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_TICKET_ASSIGNED',
+            audioPriorityContext: data.priority || 'Medium',
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch ticket assigned notification:', notifErr)
+        }
+      }
+
       return data
     } catch (err) {
       console.error('[ticketService] assignTicket error:', err)
@@ -480,7 +555,22 @@ export async function assignTicket({ ticketId, assigneeId, actorId, actorName, a
     ...history,
   ])
 
-  return updated.find((t) => t.id === ticketId)
+  const result = updated.find((t) => t.id === ticketId)
+  if (result?.reporter_id) {
+    try {
+      await createNotification({
+        targetUserId: result.reporter_id,
+        sourceTicketId: result.id,
+        eventType: 'EVENT_TICKET_ASSIGNED',
+        audioPriorityContext: result.priority || 'Medium',
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch ticket assigned notification:', notifErr)
+    }
+  }
+
+  return result
 }
 
 /**
@@ -586,17 +676,19 @@ export async function resolveTicket({ ticketId, resolutionNotes, rootCause = '',
       ])
 
       // Push notification to Employee reporter
-      if (reporterId) {
-        await supabase.from('notifications').insert([
-          {
-            target_user_id: reporterId,
-            source_ticket_id: ticketId,
-            event_type: 'EVENT_RESOLUTION_SUBMITTED',
-            visual_badge_active: true,
-            audio_priority_context: data.priority || 'Medium',
-            persistent_unread_state: 'unread',
-          },
-        ])
+      const targetReporterId = reporterId || data.reporter_id
+      if (targetReporterId) {
+        try {
+          await createNotification({
+            targetUserId: targetReporterId,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_RESOLUTION_SUBMITTED',
+            audioPriorityContext: data.priority || 'Medium',
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch resolution notification:', notifErr)
+        }
       }
 
       return data
@@ -627,24 +719,23 @@ export async function resolveTicket({ ticketId, resolutionNotes, rootCause = '',
     ...history,
   ])
 
-  if (reporterId) {
-    const notifications = mockStore.getNotifications()
-    mockStore.saveNotifications([
-      {
-        id: `n-${Date.now()}`,
-        target_user_id: reporterId,
-        source_ticket_id: ticketId,
-        event_type: 'EVENT_RESOLUTION_SUBMITTED',
-        visual_badge_active: true,
-        audio_priority_context: 'Medium',
-        persistent_unread_state: 'unread',
-        created_at: new Date().toISOString(),
-      },
-      ...notifications,
-    ])
+  const result = updated.find((t) => t.id === ticketId)
+  const targetReporterId = reporterId || result?.reporter_id
+  if (targetReporterId) {
+    try {
+      await createNotification({
+        targetUserId: targetReporterId,
+        sourceTicketId: ticketId,
+        eventType: 'EVENT_RESOLUTION_SUBMITTED',
+        audioPriorityContext: result?.priority || 'Medium',
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch resolution notification:', notifErr)
+    }
   }
 
-  return updated.find((t) => t.id === ticketId)
+  return result
 }
 
 /**
@@ -679,6 +770,21 @@ export async function verifyTicket({ ticketId, actorId, actorName, satisfactionR
         },
       ])
 
+      // Push notification to Assignee if ticket was assigned
+      if (data?.assignee_id) {
+        try {
+          await createNotification({
+            targetUserId: data.assignee_id,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_TICKET_CLOSED',
+            audioPriorityContext: 'Medium',
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch ticket closed notification:', notifErr)
+        }
+      }
+
       return data
     } catch (err) {
       console.error('[ticketService] verifyTicket error:', err)
@@ -707,7 +813,22 @@ export async function verifyTicket({ ticketId, actorId, actorName, satisfactionR
     ...history,
   ])
 
-  return updated.find((t) => t.id === ticketId)
+  const result = updated.find((t) => t.id === ticketId)
+  if (result?.assignee_id) {
+    try {
+      await createNotification({
+        targetUserId: result.assignee_id,
+        sourceTicketId: result.id,
+        eventType: 'EVENT_TICKET_CLOSED',
+        audioPriorityContext: 'Medium',
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch ticket closed notification:', notifErr)
+    }
+  }
+
+  return result
 }
 
 /**
@@ -746,17 +867,19 @@ export async function disputeTicket({ ticketId, actorId, actorName, disputeReaso
       ])
 
       // Push high priority alert to Assignee
-      if (assigneeId) {
-        await supabase.from('notifications').insert([
-          {
-            target_user_id: assigneeId,
-            source_ticket_id: ticketId,
-            event_type: 'EVENT_RESOLUTION_DISPUTED',
-            visual_badge_active: true,
-            audio_priority_context: 'High',
-            persistent_unread_state: 'unread',
-          },
-        ])
+      const targetAssigneeId = assigneeId || data.assignee_id
+      if (targetAssigneeId) {
+        try {
+          await createNotification({
+            targetUserId: targetAssigneeId,
+            sourceTicketId: data.id,
+            eventType: 'EVENT_RESOLUTION_DISPUTED',
+            audioPriorityContext: 'High',
+            visualBadgeActive: true,
+          })
+        } catch (notifErr) {
+          console.error('[ticketService] Failed to dispatch dispute notification:', notifErr)
+        }
       }
 
       return data
@@ -786,22 +909,21 @@ export async function disputeTicket({ ticketId, actorId, actorName, disputeReaso
     ...history,
   ])
 
-  if (assigneeId) {
-    const notifications = mockStore.getNotifications()
-    mockStore.saveNotifications([
-      {
-        id: `n-${Date.now()}`,
-        target_user_id: assigneeId,
-        source_ticket_id: ticketId,
-        event_type: 'EVENT_RESOLUTION_DISPUTED',
-        visual_badge_active: true,
-        audio_priority_context: 'High',
-        persistent_unread_state: 'unread',
-        created_at: new Date().toISOString(),
-      },
-      ...notifications,
-    ])
+  const result = updated.find((t) => t.id === ticketId)
+  const targetAssigneeId = assigneeId || result?.assignee_id
+  if (targetAssigneeId) {
+    try {
+      await createNotification({
+        targetUserId: targetAssigneeId,
+        sourceTicketId: ticketId,
+        eventType: 'EVENT_RESOLUTION_DISPUTED',
+        audioPriorityContext: 'High',
+        visualBadgeActive: true,
+      })
+    } catch (notifErr) {
+      console.error('[ticketService] Failed to dispatch dispute notification:', notifErr)
+    }
   }
 
-  return updated.find((t) => t.id === ticketId)
+  return result
 }

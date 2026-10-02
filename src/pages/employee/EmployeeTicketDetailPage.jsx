@@ -144,7 +144,7 @@ export default function EmployeeTicketDetailPage() {
   }
 
   return (
-    <div className="flex flex-col w-full space-y-6">
+    <div className="flex flex-col w-full space-y-6 pt-16">
       {/* Top Navigation & Context Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-1">
         <div className="space-y-1">

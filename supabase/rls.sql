@@ -123,21 +123,83 @@ FOR UPDATE TO authenticated
 USING (target_user_id = auth.uid())
 WITH CHECK (target_user_id = auth.uid());
 
--- 5.3 INSERT Policy:
+-- 5.3 Helper Function: Check Notification Participant Authorization
+-- Resolves PostgreSQL RLS subquery scoping limitations during INSERT WITH CHECK
+CREATE OR REPLACE FUNCTION public.can_insert_notification(
+    p_ticket_id UUID,
+    p_target_user_id UUID
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    v_role VARCHAR(20);
+    v_reporter_id UUID;
+    v_assignee_id UUID;
+BEGIN
+    SELECT role INTO v_role
+    FROM public.users
+    WHERE id = auth.uid();
+
+    IF v_role IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    SELECT reporter_id, assignee_id
+    INTO v_reporter_id, v_assignee_id
+    FROM public.tickets
+    WHERE id = p_ticket_id;
+
+    IF v_reporter_id IS NULL AND v_assignee_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    IF v_role = 'IT Staff'
+       AND (
+           p_target_user_id = v_reporter_id
+           OR (
+               v_assignee_id IS NOT NULL
+               AND p_target_user_id = v_assignee_id
+           )
+       )
+    THEN
+        RETURN TRUE;
+    END IF;
+
+    IF v_role = 'Employee'
+       AND v_reporter_id = auth.uid()
+       AND v_assignee_id IS NOT NULL
+       AND p_target_user_id = v_assignee_id
+    THEN
+        RETURN TRUE;
+    END IF;
+
+    RETURN FALSE;
+END;
+$$ LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp;
+
+REVOKE EXECUTE
+ON FUNCTION public.can_insert_notification(UUID, UUID)
+FROM public;
+
+GRANT EXECUTE
+ON FUNCTION public.can_insert_notification(UUID, UUID)
+TO authenticated;
+
+-- 5.4 INSERT Policy:
 -- Users cannot spam arbitrary notifications. Insertion is restricted to participants of the ticket.
-DROP POLICY IF EXISTS "notifications_insert_policy" ON public.notifications;
-CREATE POLICY "notifications_insert_policy" ON public.notifications
-FOR INSERT TO authenticated
+DROP POLICY IF EXISTS "notifications_insert_policy"
+ON public.notifications;
+
+CREATE POLICY "notifications_insert_policy"
+ON public.notifications
+FOR INSERT
+TO authenticated
 WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM public.tickets t
-        WHERE t.id = notifications.source_ticket_id
-        AND (
-            -- IT Staff notifying reporter or assignee of ticket
-            (public.get_current_user_role() = 'IT Staff' AND (t.reporter_id = notifications.target_user_id OR t.assignee_id = notifications.target_user_id))
-            -- Employee notifying assignee of their own reported ticket
-            OR (public.get_current_user_role() = 'Employee' AND t.reporter_id = auth.uid() AND t.assignee_id = notifications.target_user_id)
-        )
+    public.can_insert_notification(
+        source_ticket_id,
+        target_user_id
     )
 );
 
