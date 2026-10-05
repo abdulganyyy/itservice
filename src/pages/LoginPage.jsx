@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   Monitor,
   Clock,
-  Users,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -86,6 +85,8 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const [devOpen, setDevOpen] = useState(false)
+
+  const hasError = Boolean(errorMessage)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -175,37 +176,33 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Center: headline + feature list */}
-        <div className="relative z-10 px-28 py-12 flex-1 flex flex-col justify-center gap-space-xl">
+        {/* Center: headline + 3 focused feature highlights */}
+        <div className="relative z-10 px-28 flex-1 flex flex-col justify-center gap-space-lg">
           <div>
             <h2 className="text-display-lg font-bold text-white leading-tight">
               Your IT service<br />hub, streamlined.
             </h2>
-            <p className="text-body-lg text-white/60 mt-space-md leading-relaxed max-w-sm">
+            <p className="text-body-lg text-white/60 mt-space-md leading-relaxed max-w-xs">
               Report incidents, track resolutions, and stay informed — all from one secure portal.
             </p>
           </div>
 
-          <div className="flex flex-col gap-space-lg">
+          {/* 3 features — focused, not exhaustive */}
+          <div className="flex flex-col gap-space-md">
             <FeatureItem
               icon={ShieldCheck}
-              title="Secure Authentication"
-              description="Enterprise-grade access control with role-based permissions."
+              title="Secure, Role-Based Access"
+              description="Separate workspaces for Employees and IT Staff with enterprise-grade auth."
             />
             <FeatureItem
               icon={Clock}
-              title="Real-time Tracking"
-              description="Monitor your ticket status as IT staff resolve your request."
-            />
-            <FeatureItem
-              icon={Users}
-              title="Dual Role Support"
-              description="Separate workspaces for Employees and IT Staff."
+              title="Real-Time Ticket Tracking"
+              description="Monitor status updates as IT staff work to resolve your request."
             />
             <FeatureItem
               icon={Monitor}
-              title="Incident Management"
-              description="Submit, categorize, and trace incidents end-to-end."
+              title="End-to-End Incident Management"
+              description="Submit, categorize, assign, and close incidents in one place."
             />
           </div>
         </div>
@@ -221,9 +218,12 @@ export default function LoginPage() {
       {/* ------------------------------------------------------------------ */}
       {/* RIGHT PANEL — login form                                            */}
       {/* ------------------------------------------------------------------ */}
-      <div className="flex-1 flex flex-col items-center justify-center p-space-xl sm:p-10 min-h-screen lg:min-h-0">
+      <div className="flex-1 flex flex-col min-h-screen lg:min-h-0">
 
-        {/* Mobile logo — only shows on small screens */}
+        {/* Centered content area */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6 sm:px-10 py-10">
+
+        {/* Mobile logo — visible below lg breakpoint */}
         <div className="lg:hidden flex flex-col items-center gap-space-md mb-8 w-full max-w-sm">
           <BrandLogo size="md" />
           <div className="text-center">
@@ -250,13 +250,18 @@ export default function LoginPage() {
           </div>
 
           {/* ---- FORM ---- */}
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleSubmit} noValidate aria-label="Sign in form">
             <div className="flex flex-col gap-space-lg">
 
-              {/* Error alert */}
-              {errorMessage && (
-                <Alert variant="destructive" className="animate-in fade-in-0 slide-in-from-top-1 duration-200">
-                  <AlertCircle className="h-4 w-4" />
+              {/* Error alert — linked via aria-describedby on inputs */}
+              {hasError && (
+                <Alert
+                  id="login-error"
+                  role="alert"
+                  variant="destructive"
+                  className="animate-in fade-in-0 slide-in-from-top-1 duration-200"
+                >
+                  <AlertCircle className="h-4 w-4" aria-hidden="true" />
                   <AlertDescription>{errorMessage}</AlertDescription>
                 </Alert>
               )}
@@ -278,6 +283,8 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
+                  aria-invalid={hasError ? 'true' : undefined}
+                  aria-describedby={hasError ? 'login-error' : undefined}
                   className="h-10 text-body-md"
                 />
               </div>
@@ -300,8 +307,11 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting}
+                    aria-invalid={hasError ? 'true' : undefined}
+                    aria-describedby={hasError ? 'login-error' : undefined}
                     className="h-10 text-body-md pr-10"
                   />
+                  {/* Visibility toggle — sits inside the input boundary */}
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
@@ -310,7 +320,7 @@ export default function LoginPage() {
                     className={cn(
                       'absolute inset-y-0 right-0 flex items-center justify-center w-10',
                       'text-on-surface-variant hover:text-on-surface transition-colors',
-                      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-r-md',
+                      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:rounded-r-md',
                       'disabled:pointer-events-none disabled:opacity-50'
                     )}
                   >
@@ -322,12 +332,12 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Submit button */}
+              {/* Primary submit button */}
               <Button
                 id="login-submit"
                 type="submit"
                 size="lg"
-                className="w-full mt-space-xs"
+                className="w-full"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -346,97 +356,118 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* ---- DIVIDER ---- */}
-          <div className="flex items-center gap-space-md mt-6 mb-5">
-            <div className="flex-1 h-px bg-outline-variant/60" />
-            <span className="text-label-sm text-on-surface-variant/60 uppercase tracking-wider">
-              Dev
-            </span>
-            <div className="flex-1 h-px bg-outline-variant/60" />
-          </div>
+          {/* ---- DEV TOOLS SECTION ---- */}
+          {/*
+            Visually separated from the sign-in form above.
+            "Development Tools / Dev Env" badge makes clear this is a
+            testing utility, not part of the production sign-in flow.
+          */}
+          <div className="mt-8">
 
-          {/* ---- DEV ACCOUNTS HELPER (collapsible) ---- */}
-          <div className="rounded-xl border border-outline-variant/50 bg-surface-container-low/60 overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setDevOpen((v) => !v)}
-              className={cn(
-                'w-full flex items-center justify-between px-space-md py-2.5',
-                'text-left transition-colors hover:bg-surface-container',
-                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
-              )}
-              aria-expanded={devOpen}
-              aria-controls="dev-accounts-panel"
-            >
-              <span className="flex items-center gap-1.5 text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
-                <KeyRound size={13} aria-hidden="true" />
-                Test Accounts
-              </span>
-              {devOpen
-                ? <ChevronUp size={14} className="text-on-surface-variant" aria-hidden="true" />
-                : <ChevronDown size={14} className="text-on-surface-variant" aria-hidden="true" />
-              }
-            </button>
-
-            {devOpen && (
-              <div
-                id="dev-accounts-panel"
-                className="border-t border-outline-variant/40 px-space-md pb-space-md pt-space-sm flex flex-col gap-1.5 animate-in fade-in-0 duration-150"
-              >
-                <button
-                  type="button"
-                  onClick={() => fillDevAccount('budi.santoso@corp.internal')}
-                  className="text-left px-2.5 py-2 rounded-lg text-body-sm bg-surface hover:bg-surface-container transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm group"
-                >
-                  <span className="font-mono text-xs text-on-surface truncate">
-                    budi.santoso@corp.internal
-                  </span>
-                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0 shrink-0">
-                    Employee
-                  </Badge>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => fillDevAccount('ahmad.pratama@corp.internal')}
-                  className="text-left px-2.5 py-2 rounded-lg text-body-sm bg-surface hover:bg-surface-container transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm group"
-                >
-                  <span className="font-mono text-xs text-on-surface truncate">
-                    ahmad.pratama@corp.internal
-                  </span>
-                  <Badge variant="default" className="text-[10px] px-1.5 py-0 shrink-0">
-                    IT Staff
-                  </Badge>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => fillDevAccount('siti.rahma@corp.internal')}
-                  className="text-left px-2.5 py-2 rounded-lg text-body-sm bg-surface hover:bg-surface-container transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm group"
-                >
-                  <span className="font-mono text-xs text-on-surface truncate">
-                    siti.rahma@corp.internal
-                  </span>
-                  <Badge variant="default" className="text-[10px] px-1.5 py-0 shrink-0">
-                    IT Staff
-                  </Badge>
-                </button>
-
-                <p className="text-[11px] text-on-surface-variant/70 mt-1 px-0.5">
-                  Password: <code className="font-mono font-semibold text-on-surface">Password123!</code>
-                </p>
+            {/* Section label with DEV ENV badge */}
+            <div className="flex items-center gap-space-sm mb-3">
+              <div className="flex-1 h-px bg-outline-variant/50" />
+              <div className="flex items-center gap-1.5">
+                <KeyRound size={11} className="text-on-surface-variant/60" aria-hidden="true" />
+                <span className="text-label-sm text-on-surface-variant/60 uppercase tracking-wider font-semibold whitespace-nowrap">
+                  Development Tools
+                </span>
+                <span className="inline-flex items-center rounded border border-amber-300/60 bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700 uppercase tracking-wider leading-none">
+                  Dev Env
+                </span>
               </div>
-            )}
+              <div className="flex-1 h-px bg-outline-variant/50" />
+            </div>
+
+            {/* Collapsible test accounts panel */}
+            <div className="rounded-xl border border-outline-variant/50 bg-surface-container-low/60 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setDevOpen((v) => !v)}
+                className={cn(
+                  'w-full flex items-center justify-between px-space-md py-2.5',
+                  'text-left transition-colors hover:bg-surface-container',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:rounded-xl'
+                )}
+                aria-expanded={devOpen}
+                aria-controls="dev-accounts-panel"
+              >
+                <span className="text-label-sm text-on-surface-variant font-semibold">
+                  Test Accounts
+                </span>
+                {devOpen
+                  ? <ChevronUp size={14} className="text-on-surface-variant" aria-hidden="true" />
+                  : <ChevronDown size={14} className="text-on-surface-variant" aria-hidden="true" />
+                }
+              </button>
+
+              {devOpen && (
+                <div
+                  id="dev-accounts-panel"
+                  className="border-t border-outline-variant/40 px-space-md pt-space-sm pb-space-md flex flex-col gap-1.5 animate-in fade-in-0 duration-150"
+                >
+                  {/* Instruction note */}
+                  <p className="text-[11px] text-on-surface-variant/70 mb-1">
+                    Click any row to auto-fill credentials. Password:&nbsp;
+                    <code className="font-mono font-semibold text-on-surface">Password123!</code>
+                  </p>
+
+                  {/* Employee account */}
+                  <button
+                    type="button"
+                    onClick={() => fillDevAccount('budi.santoso@corp.internal')}
+                    className="text-left px-2.5 py-2 rounded-lg bg-surface hover:bg-surface-container active:bg-surface-container-high transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    <span className="font-mono text-xs text-on-surface truncate">
+                      budi.santoso@corp.internal
+                    </span>
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 shrink-0">
+                      Employee
+                    </Badge>
+                  </button>
+
+                  {/* IT Staff accounts */}
+                  <button
+                    type="button"
+                    onClick={() => fillDevAccount('ahmad.pratama@corp.internal')}
+                    className="text-left px-2.5 py-2 rounded-lg bg-surface hover:bg-surface-container active:bg-surface-container-high transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    <span className="font-mono text-xs text-on-surface truncate">
+                      ahmad.pratama@corp.internal
+                    </span>
+                    <Badge variant="default" className="text-[10px] px-1.5 py-0 shrink-0">
+                      IT Staff
+                    </Badge>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => fillDevAccount('siti.rahma@corp.internal')}
+                    className="text-left px-2.5 py-2 rounded-lg bg-surface hover:bg-surface-container active:bg-surface-container-high transition-colors border border-outline-variant/40 flex items-center justify-between gap-space-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    <span className="font-mono text-xs text-on-surface truncate">
+                      siti.rahma@corp.internal
+                    </span>
+                    <Badge variant="default" className="text-[10px] px-1.5 py-0 shrink-0">
+                      IT Staff
+                    </Badge>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-        </div>
+        </div>{/* /form container (w-full max-w-sm) */}
+        </div>{/* /centered content area */}
 
-        {/* Bottom footnote */}
-        <p className="text-[11px] text-on-surface-variant/50 text-center mt-10 max-w-xs">
-          This portal is for authorized corporate users only.
-          Unauthorized access is prohibited.
-        </p>
+        {/* Bottom footnote — pushed to the real bottom of the right panel */}
+        <div className="px-6 pb-6 text-center">
+          <p className="text-[11px] text-on-surface-variant/40">
+            Authorized corporate users only. Unauthorized access is prohibited.
+          </p>
+        </div>
       </div>
+
     </div>
   )
 }
