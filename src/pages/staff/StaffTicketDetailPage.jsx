@@ -143,7 +143,6 @@ export default function StaffTicketDetailPage() {
   }
 
   const handlePriorityChange = async (newPriority) => {
-    setSelectedPriority(newPriority)
     const res = await assess({ priority: newPriority })
     if (res?.data) {
       alert(`Ticket priority updated to ${newPriority}.`)
@@ -168,7 +167,6 @@ export default function StaffTicketDetailPage() {
     })
 
     if (res?.data) {
-      setResolutionSuccess(true)
       alert('Resolution submitted! Ticket routed to Employee Verification stage.')
     }
   }
