@@ -227,3 +227,38 @@ export async function markAllNotificationsAsRead(userId) {
   mockStore.saveNotifications(updated)
   return true
 }
+
+/**
+ * Delete / Clear a single notification (ACT-16 / Clear Notification)
+ * Removes notification record from Supabase or mock store. Does not alter tickets or history.
+ *
+ * @param {string} notificationId - Notification UUID
+ * @returns {Promise<boolean>}
+ */
+export async function clearNotification(notificationId) {
+  if (!notificationId) return false
+
+  if (isSupabaseConfigured()) {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('id', notificationId)
+
+      if (error) throw error
+      return true
+    } catch (err) {
+      console.error('[notificationService] clearNotification error:', err)
+      throw err
+    }
+  }
+
+  // Mock Store Fallback
+  const notifs = mockStore.getNotifications()
+  const updated = notifs.filter((n) => n.id !== notificationId)
+  mockStore.saveNotifications(updated)
+  return true
+}
+
+export const deleteNotification = clearNotification
+

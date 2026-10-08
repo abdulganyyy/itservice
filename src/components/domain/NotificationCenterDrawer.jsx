@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Bell, X, CheckCheck, Settings, Volume2, ExternalLink } from 'lucide-react'
+import { Bell, X, CheckCheck, Volume2, ExternalLink } from 'lucide-react'
 import { StatusBadge } from './StatusBadge'
 import { PriorityBadge } from './PriorityBadge'
 
@@ -20,6 +20,7 @@ import { PriorityBadge } from './PriorityBadge'
  *   unreadCount     {number}    — Total unread count
  *   onMarkAllRead   {function}  — Callback to mark all read (wired in Stage 7)
  *   onDismiss       {function}  — Callback to dismiss a single notification (wired in Stage 7)
+ *   onClear         {function}  — Callback to delete a read notification
  *   onNavigate      {function}  — Callback(ticketId) to navigate to ticket
  *   role            {string}    — 'Employee' | 'IT Staff' (affects CTA labels)
  *
@@ -46,7 +47,7 @@ const PRIORITY_LEFT_BAR = {
   null:   'bg-outline-variant',
 }
 
-function NotificationItem({ item, onDismiss, onNavigate, role }) {
+function NotificationItem({ item, onDismiss, onClear, onNavigate, role }) {
   const leftBarColor = PRIORITY_LEFT_BAR[item.priority] ?? 'bg-outline-variant'
 
   const actionLabel = role === 'Employee' ? 'Verify & Review' : 'Open Workspace'
@@ -124,10 +125,20 @@ function NotificationItem({ item, onDismiss, onNavigate, role }) {
         <div className="flex items-center justify-between mt-space-sm pt-space-xs">
           <div />
           <div className="flex items-center gap-space-xs">
-            {/* Dismiss */}
+            {/* Dismiss / Clear */}
             <button
               type="button"
-              onClick={() => onDismiss?.(item.id)}
+              onClick={() => {
+                if (item.isRead) {
+                  if (onClear) {
+                    onClear(item.id)
+                  } else {
+                    onDismiss?.(item.id)
+                  }
+                } else {
+                  onDismiss?.(item.id)
+                }
+              }}
               className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface px-space-xs py-1 rounded hover:bg-surface-container transition-colors"
             >
               {item.isRead ? 'Clear' : 'Dismiss'}
@@ -158,6 +169,7 @@ export function NotificationCenterDrawer({
   unreadCount = 0,
   onMarkAllRead,
   onDismiss,
+  onClear,
   onNavigate,
   role = 'Employee',
 }) {
@@ -232,15 +244,6 @@ export function NotificationCenterDrawer({
               >
                 <CheckCheck size={18} />
               </button>
-              {/* Settings (static — behavior wired in Stage 7) */}
-              <button
-                type="button"
-                aria-label="Notification Settings"
-                title="Notification Settings"
-                className="h-8 w-8 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors"
-              >
-                <Settings size={18} />
-              </button>
               {/* Close */}
               <button
                 type="button"
@@ -308,6 +311,7 @@ export function NotificationCenterDrawer({
                 key={item.id}
                 item={item}
                 onDismiss={onDismiss}
+                onClear={onClear}
                 onNavigate={onNavigate}
                 role={role}
               />

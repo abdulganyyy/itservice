@@ -226,33 +226,33 @@ async function runStage4ErrorTesting() {
 
   if (activeErr) throw new Error(`Active ticket transition failed: ${activeErr.message}`)
 
-  // 1.11 Below minimum resolution (< 50 chars, e.g. 39 chars)
-  const shortResolution = 'Restarted the server daemon to fix bug.' // 39 chars
-  let shortResCaught = false
-  if (shortResolution.trim().length < 50) {
-    shortResCaught = true
+  // 1.11 Empty / whitespace resolution notes (rejected)
+  const emptyResolution = '   '
+  let emptyResCaught = false
+  if (!emptyResolution || !emptyResolution.trim()) {
+    emptyResCaught = true
   }
   recordResult(
     'Validation',
-    'VAL-11: Below Minimum Resolution (< 50 chars, 39 chars)',
-    'Client/Service validation rejects resolution shorter than 50 chars',
-    shortResCaught ? 'Rejected: Resolution notes must be at least 50 characters.' : 'Allowed (FAIL)',
-    shortResCaught ? 'PASS' : 'FAIL'
+    'VAL-11: Empty / Whitespace Resolution Notes',
+    'Client/Service validation rejects empty or whitespace-only resolution notes',
+    emptyResCaught ? 'Rejected: Resolution notes are required.' : 'Allowed (FAIL)',
+    emptyResCaught ? 'PASS' : 'FAIL'
   )
 
-  // 1.12 Exact minimum resolution boundary (50 chars)
-  const res50 = 'C'.repeat(50)
+  // 1.12 Short non-empty resolution notes (accepted without minimum length)
+  const shortValidRes = 'Restarted workstation.'
   const { data: v12Data, error: v12Err } = await staff.client.from('tickets').update({
     status: 'Verification',
-    resolution_notes: res50,
+    resolution_notes: shortValidRes,
     verification_started_at: new Date().toISOString()
   }).eq('id', activeTicket.id).select().single()
-  const v12Pass = !v12Err && v12Data?.resolution_notes?.length === 50
+  const v12Pass = !v12Err && v12Data?.resolution_notes === shortValidRes
   recordResult(
     'Validation',
-    'VAL-12: Exact Minimum Resolution Boundary (50 chars)',
-    'Accepted successfully',
-    v12Pass ? `Updated Status: ${v12Data.status}, Notes length: ${v12Data.resolution_notes.length}` : v12Err?.message,
+    'VAL-12: Short Non-Empty Resolution Notes Allowed',
+    'Accepted successfully without minimum character count',
+    v12Pass ? `Updated Status: ${v12Data.status}, Notes: "${v12Data.resolution_notes}"` : v12Err?.message,
     v12Pass ? 'PASS' : 'FAIL'
   )
 

@@ -210,7 +210,7 @@ export default function StaffAssessmentPage() {
             <div className="bg-white p-6 rounded-xl border border-slate-200">
               <EmptyState
                 title="All Incidents Assessed"
-                description="There are currently no unassessed tickets waiting in the triage queue."
+                message="There are currently no unassessed tickets waiting in the triage queue."
               />
             </div>
           ) : (

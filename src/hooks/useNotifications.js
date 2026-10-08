@@ -5,6 +5,7 @@ import {
   fetchNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
+  clearNotification as apiClearNotification,
 } from '@/services/notificationService'
 
 export function useNotifications({ onAudioChime = null } = {}) {
@@ -71,6 +72,19 @@ export function useNotifications({ onAudioChime = null } = {}) {
     }
   }
 
+  const clearNotification = async (id) => {
+    // Optimistic removal from UI state
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
+    try {
+      setError(null)
+      await apiClearNotification(id)
+    } catch (err) {
+      console.error('[useNotifications] Error clearing notification:', err)
+      setError(err.message || 'Failed to clear notification.')
+      await loadNotifications()
+    }
+  }
+
   return {
     notifications,
     unreadCount,
@@ -79,5 +93,7 @@ export function useNotifications({ onAudioChime = null } = {}) {
     refetch: loadNotifications,
     markRead,
     markAllRead,
+    clearNotification,
+    clear: clearNotification,
   }
 }

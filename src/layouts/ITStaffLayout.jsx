@@ -68,6 +68,7 @@ export function ITStaffLayout() {
     unreadCount,
     markRead,
     markAllRead,
+    clearNotification,
   } = useNotifications({
     onAudioChime: (priority) => {
       audioPlayerRef.current?.play(priority)
@@ -112,6 +113,7 @@ export function ITStaffLayout() {
         unreadCount={unreadCount}
         onMarkAllRead={markAllRead}
         onDismiss={markRead}
+        onClear={clearNotification}
         onNavigate={(ticketId) => {
           setIsDrawerOpen(false)
           navigate(`/staff/tickets/${ticketId}`)
@@ -124,6 +126,10 @@ export function ITStaffLayout() {
         isOpen={isQuickTicketOpen}
         onClose={() => setIsQuickTicketOpen(false)}
         onSubmit={handleQuickTicketSubmit}
+        currentUser={{
+          name: profile?.full_name,
+          role: profile?.role,
+        }}
       />
 
       {/* ------------------------------------------------------------------ */}

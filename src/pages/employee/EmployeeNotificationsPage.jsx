@@ -10,6 +10,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import { EmptyState, PriorityBadge } from '@/components/domain'
+import { Button } from '@/components/ui/button'
 
 export default function EmployeeNotificationsPage() {
   const [filter, setFilter] = useState('all') // all, unread, high
@@ -159,9 +160,12 @@ export default function EmployeeNotificationsPage() {
         ) : (
           <EmptyState
             title="No notifications found"
-            description="You have no notifications matching the selected filter."
-            actionLabel="View All Notifications"
-            onAction={() => setFilter('all')}
+            message="You have no notifications matching the selected filter."
+            action={
+              <Button variant="outline" size="sm" onClick={() => setFilter('all')}>
+                View All Notifications
+              </Button>
+            }
           />
         )}
       </div>

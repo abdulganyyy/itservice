@@ -214,7 +214,7 @@ export default function StaffMyAssignedPage() {
             <div className="p-8">
               <EmptyState
                 title="No assigned tickets"
-                description="You currently have no active incidents assigned to your queue."
+                message="You currently have no active incidents assigned to your queue."
               />
             </div>
           )}

@@ -10,7 +10,6 @@ import {
   Lightbulb,
   MapPin,
   Edit3,
-  Layers,
   ArrowRight,
   User,
   Building,
@@ -21,50 +20,12 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 
-// Canonical Category and Subcategory Taxonomy
-const CATEGORY_TAXONOMY = {
-  'Network & Connectivity': [
-    'VPN Connection / GlobalProtect Failure',
-    'Office Wi-Fi / Local LAN Disconnect',
-    'DNS Resolution / Internal Host Unreachable',
-    'Slow Network Throughput / High Latency'
-  ],
-  'Hardware & Peripherals': [
-    'Laptop / Workstation Boot Failure',
-    'External Display / Docking Station Dropout',
-    'Office Printer / Scanner Jam & Calibration',
-    'Keyboard / Mouse / Peripheral Malfunction'
-  ],
-  'Enterprise ERP & Applications': [
-    'SAP ERP Transaction Error / Session Crash',
-    'Financial Reporting Portal Timeout',
-    'HR System / Leave & Payroll App Bug',
-    'Document Management / Cloud File Sync'
-  ],
-  'Email & Collaboration': [
-    'Microsoft Outlook / Exchange Sync Failure',
-    'Microsoft Teams Audio / Screen Sharing Loop',
-    'Shared Mailbox Permission / Access Missing',
-    'Calendar Invitation & Scheduling Conflict'
-  ],
-  'Account & Access Permissions': [
-    'Active Directory Password Reset & Unlock',
-    'Single Sign-On (SSO) / 2FA Multi-Factor Token',
-    'Shared Network Folder (NAS) Access Denied',
-    'VPN Security Clearance Escalation'
-  ]
-}
-
-const CATEGORY_KEYS = Object.keys(CATEGORY_TAXONOMY)
-
 export default function EmployeeReportPage() {
   const { profile } = useAuth()
   const navigate = useNavigate()
   const { createTicket } = useTickets()
 
   // Form Field States
-  const [category, setCategory] = useState(CATEGORY_KEYS[0])
-  const [subcategory, setSubcategory] = useState(CATEGORY_TAXONOMY[CATEGORY_KEYS[0]][0])
   const [summary, setSummary] = useState('')
   const [description, setDescription] = useState('')
   const [locationTag, setLocationTag] = useState('Desk 4B - Finance Floor, Building A')
@@ -82,8 +43,6 @@ export default function EmployeeReportPage() {
 
   // Approved Validation Rules
   const errors = {}
-  if (!category) errors.category = 'Technical category is required.'
-  if (!subcategory) errors.subcategory = 'Subcategory specification is required.'
 
   // Summary: min 5 / max 150 (PRD Section 3.2.1 & 7.1 Line 213, 963)
   if (!summary.trim()) {
@@ -101,14 +60,6 @@ export default function EmployeeReportPage() {
 
   const isFormValid = Object.keys(errors).length === 0
 
-  // Category change handler (resets subcategory to first valid child)
-  const handleCategoryChange = (newCat) => {
-    setCategory(newCat)
-    if (CATEGORY_TAXONOMY[newCat] && CATEGORY_TAXONOMY[newCat].length > 0) {
-      setSubcategory(CATEGORY_TAXONOMY[newCat][0])
-    }
-  }
-
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }))
   }
@@ -117,8 +68,6 @@ export default function EmployeeReportPage() {
     e.preventDefault()
     setSubmitAttempted(true)
     setTouched({
-      category: true,
-      subcategory: true,
       summary: true,
       description: true
     })
@@ -132,8 +81,6 @@ export default function EmployeeReportPage() {
       reporterId: profile?.id || 'emp-88421',
       reporterName: profile?.full_name || 'Rian Ardiansyah',
       department: profile?.department || 'Finance Department',
-      category,
-      subcategory,
       summary: summary.trim(),
       description: description.trim(),
       locationTag: locationTag.trim() || null,
@@ -144,7 +91,7 @@ export default function EmployeeReportPage() {
     // Call Supabase / mock mutation
     const res = await createTicket({
       summary: summary.trim(),
-      description: `${category} > ${subcategory}\n\n${description.trim()}${locationTag ? `\n\nLocation: ${locationTag}` : ''}`,
+      description: `${description.trim()}${locationTag ? `\n\nLocation: ${locationTag}` : ''}`,
       impactMetadata: 'Individual',
     })
 
@@ -156,8 +103,6 @@ export default function EmployeeReportPage() {
   }
 
   const handleResetForm = () => {
-    setCategory(CATEGORY_KEYS[0])
-    setSubcategory(CATEGORY_TAXONOMY[CATEGORY_KEYS[0]][0])
     setSummary('')
     setDescription('')
     setLocationTag('Desk 4B - Finance Floor, Building A')
@@ -287,68 +232,11 @@ export default function EmployeeReportPage() {
 
             {/* Form Body */}
             <form onSubmit={handleSubmit} noValidate className="p-6 space-y-5">
-              {/* Category Selector */}
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="report-category" className="text-xs font-semibold text-slate-900 flex items-center gap-1">
-                    <span>1. Category / Affected Area</span>
-                    <span className="text-red-500 font-bold">*</span>
-                  </label>
-                  <span className="text-[11px] text-slate-400">Technical Domain</span>
-                </div>
-                <div className="relative">
-                  <select
-                    id="report-category"
-                    value={category}
-                    onChange={(e) => handleCategoryChange(e.target.value)}
-                    onBlur={() => handleBlur('category')}
-                    className="w-full h-10 px-3 pl-9 rounded-lg border border-slate-300 bg-white text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer"
-                  >
-                    {CATEGORY_KEYS.map((catKey) => (
-                      <option key={catKey} value={catKey}>
-                        {catKey}
-                      </option>
-                    ))}
-                  </select>
-                  <Layers className="w-4 h-4 absolute left-3 top-3 text-blue-600 pointer-events-none" />
-                </div>
-                {touched.category && errors.category && (
-                  <p className="text-[11px] text-red-600 font-medium">{errors.category}</p>
-                )}
-              </div>
-
-              {/* Dynamic Subcategory Selector */}
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="report-subcategory" className="text-xs font-semibold text-slate-900 flex items-center gap-1">
-                    <span>2. Specific Subcategory / Component</span>
-                    <span className="text-red-500 font-bold">*</span>
-                  </label>
-                  <span className="text-[11px] text-slate-400">Target Feature</span>
-                </div>
-                <div className="relative">
-                  <select
-                    id="report-subcategory"
-                    value={subcategory}
-                    onChange={(e) => setSubcategory(e.target.value)}
-                    onBlur={() => handleBlur('subcategory')}
-                    className="w-full h-10 px-3 pl-9 rounded-lg border border-slate-300 bg-white text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer"
-                  >
-                    {(CATEGORY_TAXONOMY[category] || []).map((subItem) => (
-                      <option key={subItem} value={subItem}>
-                        {subItem}
-                      </option>
-                    ))}
-                  </select>
-                  <Edit3 className="w-4 h-4 absolute left-3 top-3 text-slate-400 pointer-events-none" />
-                </div>
-              </div>
-
               {/* Issue Summary */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="report-summary" className="text-xs font-semibold text-slate-900 flex items-center gap-1">
-                    <span>3. Issue Summary (Headline)</span>
+                    <span>1. Issue Summary (Headline)</span>
                     <span className="text-red-500 font-bold">*</span>
                   </label>
                   <span className={`font-mono text-xs ${summaryLength < 5 ? 'text-slate-400' : summaryLength > 140 ? 'text-amber-600 font-bold' : 'text-emerald-600 font-semibold'}`}>
@@ -386,7 +274,7 @@ export default function EmployeeReportPage() {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="report-description" className="text-xs font-semibold text-slate-900 flex items-center gap-1">
-                    <span>4. Detailed Problem Description</span>
+                    <span>2. Detailed Problem Description</span>
                     <span className="text-red-500 font-bold">*</span>
                   </label>
                   <span className="text-[11px] text-slate-400">
@@ -417,7 +305,7 @@ export default function EmployeeReportPage() {
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <label htmlFor="report-location" className="text-xs font-semibold text-slate-900">
-                      5. Workstation / Location Tag
+                      3. Workstation / Location Tag
                     </label>
                     <span className="text-[11px] text-slate-400">Optional Helper</span>
                   </div>
@@ -440,7 +328,7 @@ export default function EmployeeReportPage() {
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <label htmlFor="report-contact" className="text-xs font-semibold text-slate-900">
-                      6. Contact Phone / Extension
+                      4. Contact Phone / Extension
                     </label>
                     <span className="text-[11px] text-slate-400">Optional</span>
                   </div>

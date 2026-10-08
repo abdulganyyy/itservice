@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useTickets } from '@/hooks/useTickets'
+import { Button } from '@/components/ui/button'
 import {
   StatusBadge,
   PriorityBadge,
@@ -150,7 +151,7 @@ export default function StaffDashboard() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Priority Filter */}
             <select
               value={priorityFilter}
@@ -283,13 +284,20 @@ export default function StaffDashboard() {
             <div className="p-8">
               <EmptyState
                 title="No operational incidents found"
-                description="No active incidents match your current queue filters."
-                actionLabel="Reset Queue Filters"
-                onAction={() => {
-                  setPriorityFilter('all')
-                  setStageFilter('all')
-                  setSearchQuery('')
-                }}
+                message="No active incidents match your current queue filters."
+                action={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setPriorityFilter('all')
+                      setStageFilter('all')
+                      setSearchQuery('')
+                    }}
+                  >
+                    Reset Queue Filters
+                  </Button>
+                }
               />
             </div>
           )}
@@ -301,6 +309,10 @@ export default function StaffDashboard() {
         isOpen={isQuickTicketOpen}
         onClose={() => setIsQuickTicketOpen(false)}
         onSubmit={handleQuickTicketSubmit}
+        currentUser={{
+          name: profile?.full_name,
+          role: profile?.role,
+        }}
       />
     </div>
   )

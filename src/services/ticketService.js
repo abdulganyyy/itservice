@@ -641,8 +641,8 @@ export async function addWorkNote({ ticketId, actorId, actorName, note }) {
  * Submit Incident Resolution (UC-07 / ACT-09 / Guard 3 & Invariant 3)
  */
 export async function resolveTicket({ ticketId, resolutionNotes, rootCause = '', actorId, actorName, reporterId }) {
-  if (!resolutionNotes || resolutionNotes.trim().length < 50) {
-    throw new Error('Resolution notes must be at least 50 characters.')
+  if (!resolutionNotes || !resolutionNotes.trim()) {
+    throw new Error('Resolution notes are required.')
   }
 
   const updates = {

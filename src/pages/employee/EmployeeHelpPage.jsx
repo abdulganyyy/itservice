@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How do I request software licenses or ERP access permissions?',
-    a: 'Use the "Report IT Problem" intake form and select "Account & Access Permissions" as the category. Ensure your department manager has approved the role requisition in advance.'
+    a: 'Use the "Report IT Problem" intake form and specify your software or ERP access requirements in the issue description. Ensure your department manager has approved the role requisition in advance.'
   }
 ]
 

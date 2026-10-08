@@ -304,7 +304,7 @@ export default function EmployeeDashboard() {
             <div className="p-8">
               <EmptyState
                 title="No active tickets found"
-                description="You currently have no open requests matching your filter criteria."
+                message="You currently have no open requests matching your filter criteria."
               />
             </div>
           ) : (
@@ -313,7 +313,7 @@ export default function EmployeeDashboard() {
                 <tr className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
                   <th className="py-2.5 px-4">Ticket ID</th>
                   <th className="py-2.5 px-4">Issue Summary</th>
-                  <th className="py-2.5 px-4">Impact / Category</th>
+                  <th className="py-2.5 px-4">Impact</th>
                   <th className="py-2.5 px-4">Priority</th>
                   <th className="py-2.5 px-4">Reported Date</th>
                   <th className="py-2.5 px-4">Stage</th>

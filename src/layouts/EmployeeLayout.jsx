@@ -52,6 +52,7 @@ export function EmployeeLayout() {
     unreadCount,
     markRead,
     markAllRead,
+    clearNotification,
   } = useNotifications()
 
   const handleSignOut = async () => {
@@ -79,6 +80,7 @@ export function EmployeeLayout() {
         unreadCount={unreadCount}
         onMarkAllRead={markAllRead}
         onDismiss={markRead}
+        onClear={clearNotification}
         onNavigate={(ticketId) => {
           setIsDrawerOpen(false)
           navigate(`/employee/tickets/${ticketId}`)

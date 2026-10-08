@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTicketDetail } from '@/hooks/useTicketDetail'
+import { Button } from '@/components/ui/button'
 import {
   StatusBadge,
   PriorityBadge,
@@ -135,9 +136,12 @@ export default function EmployeeTicketDetailPage() {
       <div className="p-8">
         <EmptyState
           title="Incident Not Found"
-          description={error || `No incident ticket exists with ID #${ticketId}.`}
-          actionLabel="Back to My Tickets"
-          onAction={() => window.location.assign('/employee/tickets')}
+          message={error || `No incident ticket exists with ID #${ticketId}.`}
+          action={
+            <Button variant="outline" size="sm" onClick={() => window.location.assign('/employee/tickets')}>
+              Back to My Tickets
+            </Button>
+          }
         />
       </div>
     )

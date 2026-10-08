@@ -264,7 +264,7 @@ async function runFeatureTests() {
   // ---------------------------------------------------------------------------
   console.log('\n--- Step 7: Resolution (IT Staff) ---')
   const validResolution = 'Unlocked locked user session in SAP NetWeaver Administrator, reset ERP session pool, and tested remote RFC connectivity from endpoint FIN-WS-0412. SAP GUI logged in successfully.'
-  const isResValidLength = validResolution.length >= 50
+  const isResValidLength = validResolution.trim().length > 0
   
   const { data: resolvedTicket, error: resolveErr } = await staff1.client.from('tickets').update({
     status: 'Verification',
@@ -294,7 +294,7 @@ async function runFeatureTests() {
   const resolvePass = !resolveErr && resolvedTicket?.status === 'Verification' && isResValidLength
   recordTest(
     '11. Resolution',
-    'Submit valid resolution (>= 50 chars) and transition status to Verification',
+    'Submit valid non-empty resolution and transition status to Verification',
     'Status transitions to "Verification", resolution_notes recorded, notification sent to Employee',
     resolvePass ? `Status: ${resolvedTicket?.status}, Resolution length: ${validResolution.length} chars` : resolveErr?.message,
     resolvePass

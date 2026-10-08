@@ -126,7 +126,7 @@ export default function StaffIncidentHistoryPage() {
             <div className="bg-white p-6 rounded-xl border border-slate-200">
               <EmptyState
                 title="No archived incidents"
-                description="No closed incident tickets match your query."
+                message="No closed incident tickets match your query."
               />
             </div>
           ) : (

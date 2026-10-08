@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useTickets } from '@/hooks/useTickets'
+import { Button } from '@/components/ui/button'
 import {
   StatusBadge,
   PriorityBadge,
@@ -9,7 +10,6 @@ import {
 } from '@/components/domain'
 import {
   PlusCircle,
-  Download,
   Search,
   CheckCircle2,
   Clock,
@@ -36,11 +36,10 @@ function formatRelativeTime(dateStr) {
 export default function EmployeeMyTicketsPage() {
   const { profile } = useAuth()
   const navigate = useNavigate()
-  const { tickets, loading, metrics } = useTickets()
+  const { tickets, loading } = useTickets()
 
   const [activeTab, setActiveTab] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('all')
 
   const filteredTickets = useMemo(() => {
     return tickets.filter((ticket) => {
@@ -53,9 +52,6 @@ export default function EmployeeMyTicketsPage() {
         return false
       if (activeTab === 'closed' && ticket.status !== 'Closed') return false
 
-      // Category / Impact filter
-      if (categoryFilter !== 'all' && ticket.impact_metadata !== categoryFilter) return false
-
       // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase()
@@ -67,7 +63,7 @@ export default function EmployeeMyTicketsPage() {
 
       return true
     })
-  }, [tickets, activeTab, categoryFilter, searchQuery])
+  }, [tickets, activeTab, searchQuery])
 
 
   return (
@@ -88,14 +84,6 @@ export default function EmployeeMyTicketsPage() {
 
         {/* Actions */}
         <div className="flex items-center gap-2.5 self-start md:self-auto flex-wrap">
-          <button
-            type="button"
-            onClick={() => alert('Exporting tickets to CSV...')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs"
-          >
-            <Download className="w-4 h-4 text-slate-500" />
-            <span>Export CSV</span>
-          </button>
           <Link
             to="/employee/report"
             className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors shadow-sm active:scale-95"
@@ -243,7 +231,7 @@ export default function EmployeeMyTicketsPage() {
             </button>
           </div>
 
-          {/* Search & Filter dropdowns */}
+          {/* Search */}
           <div className="flex items-center gap-2">
             <div className="relative min-w-[200px]">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
@@ -255,17 +243,6 @@ export default function EmployeeMyTicketsPage() {
                 className="w-full pl-8 pr-3 py-1.5 text-xs bg-white rounded-lg border border-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
               />
             </div>
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="py-1.5 px-2 text-xs bg-white rounded-lg border border-slate-300 text-slate-700 focus:outline-none cursor-pointer"
-            >
-              <option value="all">All Categories</option>
-              <option value="Network & VPN">Network &amp; VPN</option>
-              <option value="Hardware & Peripherals">Hardware &amp; Peripherals</option>
-              <option value="Enterprise ERP">Enterprise ERP</option>
-              <option value="Email & Collaboration">Email &amp; Collaboration</option>
-            </select>
           </div>
         </div>
 
@@ -282,7 +259,7 @@ export default function EmployeeMyTicketsPage() {
                 <tr className="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
                   <th className="py-3 px-4">Ticket ID</th>
                   <th className="py-3 px-4">Problem Summary</th>
-                  <th className="py-3 px-4">Impact Category</th>
+                  <th className="py-3 px-4">Impact</th>
                   <th className="py-3 px-4">Priority</th>
                   <th className="py-3 px-4">Current Stage</th>
                   <th className="py-3 px-4">Assigned Tech</th>
@@ -348,13 +325,19 @@ export default function EmployeeMyTicketsPage() {
           <div className="p-8">
             <EmptyState
               title="No tickets found"
-              description="No incident reports match your current filter criteria."
-              actionLabel="Reset Filters"
-              onAction={() => {
-                setActiveTab('all')
-                setSearchQuery('')
-                setCategoryFilter('all')
-              }}
+              message="No incident reports match your current filter criteria."
+              action={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setActiveTab('all')
+                    setSearchQuery('')
+                  }}
+                >
+                  Reset Filters
+                </Button>
+              }
             />
           </div>
         )}

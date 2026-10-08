@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useTicketDetail } from '@/hooks/useTicketDetail'
+import { Button } from '@/components/ui/button'
 import {
   StatusBadge,
   PriorityBadge,
@@ -153,7 +154,7 @@ export default function StaffTicketDetailPage() {
     e.preventDefault()
     setResolutionSubmitAttempted(true)
 
-    if (remediationNotes.trim().length < 50) {
+    if (!remediationNotes.trim()) {
       return
     }
 
@@ -185,9 +186,12 @@ export default function StaffTicketDetailPage() {
       <div className="p-8">
         <EmptyState
           title="Incident Record Not Found"
-          description={error || `No ticket found with ID #${ticketId}.`}
-          actionLabel="Return to Operational Queue"
-          onAction={() => window.location.assign('/staff')}
+          message={error || `No ticket found with ID #${ticketId}.`}
+          action={
+            <Button variant="outline" size="sm" onClick={() => window.location.assign('/staff')}>
+              Return to Operational Queue
+            </Button>
+          }
         />
       </div>
     )
@@ -464,11 +468,8 @@ export default function StaffTicketDetailPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 flex items-center justify-between">
-                    <span>Remediation Notes (Min 50 Chars)</span>
-                    <span className="font-mono text-[11px] text-slate-400">
-                      {remediationNotes.trim().length}/50
-                    </span>
+                  <label className="font-bold text-slate-700 block">
+                    Remediation Notes
                   </label>
                   <textarea
                     rows={4}
@@ -477,9 +478,9 @@ export default function StaffTicketDetailPage() {
                     placeholder="Provide explicit technical explanation of the fix applied and commands executed..."
                     className="w-full bg-slate-50 text-slate-900 p-2.5 rounded-lg border border-slate-300 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600"
                   />
-                  {resolutionSubmitAttempted && remediationNotes.trim().length < 50 && (
+                  {resolutionSubmitAttempted && !remediationNotes.trim() && (
                     <p className="text-red-600 text-[11px]">
-                      Remediation notes must be at least 50 characters (currently {remediationNotes.trim().length}).
+                      Remediation notes are required.
                     </p>
                   )}
                 </div>
